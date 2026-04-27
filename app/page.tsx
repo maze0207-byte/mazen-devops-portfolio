@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic"
 import { Navigation } from "@/components/portfolio/navigation"
 import { Hero } from "@/components/portfolio/hero"
 import { About } from "@/components/portfolio/about"
@@ -6,10 +5,7 @@ import { Skills } from "@/components/portfolio/skills"
 import { Projects } from "@/components/portfolio/projects"
 import { Contact } from "@/components/portfolio/contact"
 import { Footer } from "@/components/portfolio/footer"
-
-const Terminal = dynamic(() => import("@/components/portfolio/terminal"), {
-  ssr: false,
-})
+import { TerminalWrapper } from "@/components/portfolio/terminal-wrapper"
 
 export default function PortfolioPage() {
   return (
@@ -23,7 +19,7 @@ export default function PortfolioPage() {
       <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
       <Projects />
       <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
-      <Terminal />
+      <TerminalWrapper />
       <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
       <Contact />
       <Footer />
