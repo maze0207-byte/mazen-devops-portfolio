@@ -110,7 +110,7 @@ async function createSandboxSession() {
   return { container, stream: shellStream }
 }
 
-wss.on("connection", async (ws, req) => {
+wss.on("connection", async (ws: WebSocket, req: import("http").IncomingMessage) => {
   const remoteIp = req.socket.remoteAddress ?? "unknown"
 
   if (activeSessions.size >= MAX_SESSIONS) {
@@ -153,7 +153,7 @@ wss.on("connection", async (ws, req) => {
       cleanupSession(ws)
     })
 
-    ws.on("message", (message) => {
+    ws.on("message", (message: string | Buffer) => {
       const payload = typeof message === "string" ? message : message.toString("utf8")
       stream.write(payload)
       resetIdleTimer(ws)
@@ -163,7 +163,7 @@ wss.on("connection", async (ws, req) => {
       cleanupSession(ws)
     })
 
-    ws.on("error", () => {
+    ws.on("error", (error: Error) => {
       cleanupSession(ws)
     })
   } catch (error) {
