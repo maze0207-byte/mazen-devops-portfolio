@@ -177,7 +177,7 @@ wss.on("listening", () => {
   console.log(`Terminal WebSocket server listening on ws://localhost:${PORT}`)
 })
 
-wss.on("error", (error) => {
+wss.on("error", (error: Error) => {
   console.error("WebSocket server error:", error)
 })
 
