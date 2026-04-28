@@ -23,6 +23,7 @@ export function TerminalWindow({ className }: { className?: string }) {
   const { send, status: socketStatus } = useTerminalSocket(DEFAULT_WS_URL, onMessage)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStatus(socketStatus)
   }, [socketStatus])
 
@@ -30,9 +31,10 @@ export function TerminalWindow({ className }: { className?: string }) {
     let fitObserver: ResizeObserver | null = null
     let resizeHandler: () => void
     let isMounted = true
+    const terminalElement = terminalRef.current
 
     const initializeTerminal = async () => {
-      if (!terminalRef.current || !isMounted) return
+      if (!terminalElement || !isMounted) return
 
       const [{ Terminal }, { FitAddon }, { WebLinksAddon }] = await Promise.all([
         import("xterm"),
@@ -61,7 +63,7 @@ export function TerminalWindow({ className }: { className?: string }) {
       const webLinksAddon = new WebLinksAddon()
       term.loadAddon(fitAddon)
       term.loadAddon(webLinksAddon)
-      term.open(terminalRef.current)
+      term.open(terminalElement)
       term.writeln("\x1b[32mWelcome to the Mazen DevOps live cluster terminal.\x1b[0m")
       term.writeln("Type \x1b[36mhelp\x1b[0m for available commands or use the shell prompt directly.")
       term.writeln("")
@@ -84,7 +86,7 @@ export function TerminalWindow({ className }: { className?: string }) {
         fitObserver = new ResizeObserver(() => {
           fitAddon.fit()
         })
-        fitObserver.observe(terminalRef.current)
+        fitObserver.observe(terminalElement)
       }
 
       window.addEventListener("resize", resizeHandler)
@@ -94,8 +96,8 @@ export function TerminalWindow({ className }: { className?: string }) {
 
     return () => {
       isMounted = false
-      if (fitObserver && terminalRef.current) {
-        fitObserver.unobserve(terminalRef.current)
+      if (fitObserver && terminalElement) {
+        fitObserver.unobserve(terminalElement)
       }
       window.removeEventListener("resize", resizeHandler)
       if (xtermRef.current) {
