@@ -94,12 +94,12 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
+
       - name: Build Docker image 
         uses: docker/build-push-action@v7
         with:
           context: .
-          tags: mazen-devops-portfolio:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
   
