@@ -3,17 +3,21 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+RUN corepack enable pnpm
 
-RUN npm ci
-
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
 COPY . .
-RUN npm run build
+
+RUN pnpm install --frozen-lockfile
+
+RUN pnpm run build
 
 # Stage 2: Run
 FROM node:20-alpine
 
 WORKDIR /app
+
+RUN corepack enable pnpm
 
 COPY --from=builder /app ./
 
@@ -21,4 +25,4 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
