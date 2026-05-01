@@ -18,7 +18,7 @@ export function Terminal() {
           className="mb-10"
         >
           <span className="font-mono text-sm text-cyan-400 tracking-[0.3em] uppercase">
-            testlab
+            04 / Infrastructure
           </span>
           <h2 className="mt-4 text-3xl md:text-4xl font-bold text-white">
             Try the live cluster
