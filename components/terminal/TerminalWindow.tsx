@@ -10,9 +10,6 @@ export function TerminalWindow({ className }: { className?: string }) {
   const xtermRef = useRef<any>(null)
   const fitAddonRef = useRef<any>(null)
   const [ready, setReady] = useState(false)
-  const [status, setStatus] = useState<"connecting" | "connected" | "disconnected">(
-    "connecting",
-  )
 
   const onMessage = useCallback((data: string) => {
     if (xtermRef.current) {
@@ -21,10 +18,7 @@ export function TerminalWindow({ className }: { className?: string }) {
   }, [])
 
   const { send, status: socketStatus } = useTerminalSocket(DEFAULT_WS_URL, onMessage)
-
-  useEffect(() => {
-    setStatus(socketStatus)
-  }, [socketStatus])
+  const status = socketStatus
 
   useEffect(() => {
     let fitObserver: ResizeObserver | null = null
@@ -80,11 +74,12 @@ export function TerminalWindow({ className }: { className?: string }) {
         fitAddon.fit()
       }
 
-      if (typeof window.ResizeObserver !== "undefined") {
+      const terminalElement = terminalRef.current
+      if (typeof window.ResizeObserver !== "undefined" && terminalElement) {
         fitObserver = new ResizeObserver(() => {
           fitAddon.fit()
         })
-        fitObserver.observe(terminalRef.current)
+        fitObserver.observe(terminalElement)
       }
 
       window.addEventListener("resize", resizeHandler)
@@ -94,8 +89,8 @@ export function TerminalWindow({ className }: { className?: string }) {
 
     return () => {
       isMounted = false
-      if (fitObserver && terminalRef.current) {
-        fitObserver.unobserve(terminalRef.current)
+      if (fitObserver && terminalElement) {
+        fitObserver.unobserve(terminalElement)
       }
       window.removeEventListener("resize", resizeHandler)
       if (xtermRef.current) {
