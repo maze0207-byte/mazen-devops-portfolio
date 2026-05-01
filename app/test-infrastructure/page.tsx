@@ -53,25 +53,25 @@ export default function TestInfrastructurePage() {
   const inputRef = useRef<HTMLInputElement>(null)
   const lineIdRef = useRef(3)
 
-  const checkConnectionStatus = useCallback(async () => {
-    try {
-      const response = await fetch("/api/terminal")
-      const data = await response.json()
-      setConnectionStatus(data)
-    } catch {
-      setConnectionStatus({
-        status: "error",
-        clusterConnected: false,
-        mode: "demo",
-        timestamp: new Date().toISOString(),
-      })
-    }
-  }, [])
-
   // Check connection status on mount
   useEffect(() => {
-    checkConnectionStatus()
-  }, [checkConnectionStatus])
+    const fetchConnectionStatus = async () => {
+      try {
+        const response = await fetch("/api/terminal")
+        const data = await response.json()
+        setConnectionStatus(data)
+      } catch {
+        setConnectionStatus({
+          status: "error",
+          clusterConnected: false,
+          mode: "demo",
+          timestamp: new Date().toISOString(),
+        })
+      }
+    }
+
+    fetchConnectionStatus()
+  }, [])
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -87,21 +87,6 @@ export default function TestInfrastructurePage() {
     terminal?.addEventListener("click", handleClick)
     return () => terminal?.removeEventListener("click", handleClick)
   }, [])
-
-  const checkConnectionStatus = async () => {
-    try {
-      const response = await fetch("/api/terminal")
-      const data = await response.json()
-      setConnectionStatus(data)
-    } catch {
-      setConnectionStatus({
-        status: "error",
-        clusterConnected: false,
-        mode: "demo",
-        timestamp: new Date().toISOString(),
-      })
-    }
-  }
 
   const addLine = useCallback((type: TerminalLine["type"], content: string) => {
     lineIdRef.current += 1

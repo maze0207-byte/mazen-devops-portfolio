@@ -25,9 +25,12 @@ export function TerminalWindow({ className }: { className?: string }) {
     let resizeHandler: () => void
     let isMounted = true
 
+    let terminalElement: HTMLDivElement | null = null
+
     const initializeTerminal = async () => {
       if (!terminalRef.current || !isMounted) return
 
+      terminalElement = terminalRef.current
       const [{ Terminal }, { FitAddon }, { WebLinksAddon }] = await Promise.all([
         import("xterm"),
         import("xterm-addon-fit"),
@@ -55,7 +58,7 @@ export function TerminalWindow({ className }: { className?: string }) {
       const webLinksAddon = new WebLinksAddon()
       term.loadAddon(fitAddon)
       term.loadAddon(webLinksAddon)
-      term.open(terminalRef.current)
+      term.open(terminalElement)
       term.writeln("\x1b[32mWelcome to the Mazen DevOps live cluster terminal.\x1b[0m")
       term.writeln("Type \x1b[36mhelp\x1b[0m for available commands or use the shell prompt directly.")
       term.writeln("")
@@ -74,7 +77,6 @@ export function TerminalWindow({ className }: { className?: string }) {
         fitAddon.fit()
       }
 
-      const terminalElement = terminalRef.current
       if (typeof window.ResizeObserver !== "undefined" && terminalElement) {
         fitObserver = new ResizeObserver(() => {
           fitAddon.fit()
