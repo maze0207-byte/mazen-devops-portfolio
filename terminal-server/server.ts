@@ -110,7 +110,7 @@ async function createSandboxSession() {
   return { container, stream: shellStream }
 }
 
-wss.on("connection", async (ws: WebSocket, req: import("http").IncomingMessage) => {
+wss.on("connection", async (ws, req) => {
   const remoteIp = req.socket.remoteAddress ?? "unknown"
 
   if (activeSessions.size >= MAX_SESSIONS) {
@@ -153,7 +153,7 @@ wss.on("connection", async (ws: WebSocket, req: import("http").IncomingMessage) 
       cleanupSession(ws)
     })
 
-    ws.on("message", (message: string | Buffer) => {
+    ws.on("message", (message) => {
       const payload = typeof message === "string" ? message : message.toString("utf8")
       stream.write(payload)
       resetIdleTimer(ws)
@@ -163,7 +163,7 @@ wss.on("connection", async (ws: WebSocket, req: import("http").IncomingMessage) 
       cleanupSession(ws)
     })
 
-    ws.on("error", (error: Error) => {
+    ws.on("error", () => {
       cleanupSession(ws)
     })
   } catch (error) {
@@ -177,7 +177,7 @@ wss.on("listening", () => {
   console.log(`Terminal WebSocket server listening on ws://localhost:${PORT}`)
 })
 
-wss.on("error", (error: Error) => {
+wss.on("error", (error) => {
   console.error("WebSocket server error:", error)
 })
 

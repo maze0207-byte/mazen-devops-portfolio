@@ -1,21 +1,24 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, Terminal } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import { FeedbackDialog } from "./feedback-dialog"
 
 const navLinks = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
+  { href: "#infrastructure", label: "04 / Infrastructure" },
   { href: "#contact", label: "Contact" },
 ]
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,6 +59,7 @@ export function Navigation() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
+<<<<<<< HEAD
             <Link
               href="#terminal"
               className="flex items-center gap-2 px-3 py-1.5 text-sm text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all relative group"
@@ -66,10 +70,14 @@ export function Navigation() {
             </Link>
             <a
               href="#contact"
+=======
+            <button
+              onClick={() => setIsFeedbackOpen(true)}
+>>>>>>> 7df113d122c3f467150f07481d5a72d51f4e29fd
               className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
             >
               Let&apos;s Talk
-            </a>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -103,6 +111,7 @@ export function Navigation() {
                   {link.label}
                 </a>
               ))}
+<<<<<<< HEAD
               <Link
                 href="#terminal"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -115,13 +124,23 @@ export function Navigation() {
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="block w-full text-center px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium rounded-lg"
+=======
+              <button
+                onClick={() => {
+                  setIsFeedbackOpen(true)
+                  setIsMobileMenuOpen(false)
+                }}
+                className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium rounded-lg"
+>>>>>>> 7df113d122c3f467150f07481d5a72d51f4e29fd
               >
                 Let&apos;s Talk
-              </a>
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <FeedbackDialog open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen} />
     </nav>
   )
 }
