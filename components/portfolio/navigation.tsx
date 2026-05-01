@@ -57,7 +57,7 @@ export function Navigation() {
               </a>
             ))}
             <Link
-              href="/test-infrastructure"
+              href="#terminal"
               className="flex items-center gap-2 px-3 py-1.5 text-sm text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all relative group"
             >
               <Terminal size={14} />
@@ -104,7 +104,7 @@ export function Navigation() {
                 </a>
               ))}
               <Link
-                href="/test-infrastructure"
+                href="#terminal"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center justify-center gap-2 w-full px-4 py-2 text-cyan-400 border border-cyan-500/30 rounded-lg"
               >
