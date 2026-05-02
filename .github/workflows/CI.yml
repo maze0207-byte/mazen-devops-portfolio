@@ -98,7 +98,7 @@ jobs:
 
     # secret scan for Docker Hub credentials (optional but recommended)
       - name: Check for Docker Hub credentials in code
-        uses: gitleaks/gitleaks-action@v2.8.0
+        uses: gitleaks/gitleaks-action@v2
         with:
           args: "--path . --report-format json --report-path gitleaks_report.json --redact"
 
