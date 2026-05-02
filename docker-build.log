@@ -262,3 +262,702 @@ d56d50c58a04632e6c0fb8363f609372293 0.0s done
 #7 transferring context: 1.70GB 1162.8s
 #7 transferring context: 1.74GB 1167.9s
 #7 transferring context: 1.77GB 1172.9s
+#7 transferring context: 1.79GB 1177.9s
+#7 transferring context: 1.79GB 1182.9s
+#7 transferring context: 1.80GB 1188.0s
+#7 transferring context: 1.80GB 1193.0s
+#7 transferring context: 1.81GB 1198.0s
+#7 transferring context: 1.81GB 1203.1s
+#7 transferring context: 1.81GB 1208.1s
+#7 transferring context: 1.82GB 1213.2s
+#7 transferring context: 1.83GB 1218.3s
+#7 transferring context: 1.83GB 1223.3s
+#7 transferring context: 1.84GB 1228.4s
+#7 transferring context: 1.90GB 1233.5s
+#7 transferring context: 1.96GB 1238.5s
+#7 transferring context: 1.98GB 1243.5s
+#7 transferring context: 1.99GB 1248.6s
+#7 transferring context: 1.99GB 1253.7s
+#7 transferring context: 2.00GB 1258.7s
+#7 transferring context: 2.00GB 1263.8s
+#7 transferring context: 2.01GB 1268.9s
+#7 transferring context: 2.01GB 1273.9s
+#7 transferring context: 2.01GB 1279.0s
+#7 transferring context: 2.04GB 1284.1s
+#7 transferring context: 2.04GB 1289.2s
+#7 transferring context: 2.04GB 1294.2s
+#7 transferring context: 2.05GB 1299.3s
+#7 transferring context: 2.05GB 1304.3s
+#7 transferring context: 2.05GB 1309.4s
+#7 transferring context: 2.06GB 1314.5s
+#7 transferring context: 2.09GB 1319.6s
+#7 transferring context: 2.15GB 1324.6s
+#7 transferring context: 2.23GB 1329.7s
+#7 transferring context: 2.24GB 1334.8s
+#7 transferring context: 2.24GB 1339.8s
+#7 transferring context: 2.24GB 1344.9s
+#7 transferring context: 2.25GB 1349.9s
+#7 transferring context: 2.25GB 1355.0s
+#7 transferring context: 2.25GB 1360.1s
+#7 transferring context: 2.25GB 1365.1s
+#7 transferring context: 2.26GB 1370.2s
+#7 transferring context: 2.26GB 1375.2s
+#7 transferring context: 2.26GB 1380.3s
+#7 transferring context: 2.26GB 1385.3s
+#7 transferring context: 2.26GB 1390.5s
+#7 transferring context: 2.26GB 1395.7s
+#7 transferring context: 2.26GB 1400.7s
+#7 transferring context: 2.27GB 1405.7s
+#7 transferring context: 2.27GB 1410.8s
+#7 transferring context: 2.27GB 1415.9s
+#7 transferring context: 2.28GB 1421.0s
+#7 transferring context: 2.28GB 1426.0s
+#7 transferring context: 2.29GB 1431.0s
+#7 transferring context: 2.29GB 1436.1s
+#7 transferring context: 2.30GB 1441.1s
+#7 transferring context: 2.30GB 1446.1s
+#7 transferring context: 2.30GB 1451.2s
+#7 transferring context: 2.30GB 1456.2s
+#7 transferring context: 2.30GB 1461.2s
+#7 transferring context: 2.31GB 1466.2s done
+#7 DONE 1466.7s
+
+#8 [builder 3/6] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+#8 DONE 0.6s
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 3.533 Preparing pnpm@latest for immediate activation...
+#9 ...
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 3.799 Preparing pnpm@latest for immediate activation...
+#10 9.769 Lockfile is up to date, resolution step is skipped
+#10 9.893 Progress: resolved 1, reused 0, downloaded 0, added 0
+#10 10.37 Packages: +482
+#10 10.37 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#10 10.91 Progress: resolved 482, reused 0, downloaded 0, added 0
+#10 11.97 Progress: resolved 482, reused 0, downloaded 35, added 35
+#10 12.97 Progress: resolved 482, reused 0, downloaded 77, added 77
+#10 13.47 ΓÇëWARNΓÇë Tarball download average speed 28 KiB/s (size 29 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@radix-ui/react-slider/-/react-slider-1.3.6.tgz (GET)
+#10 13.96 ΓÇëWARNΓÇë Tarball download average speed 8 KiB/s (size 12 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-context-menu/-/react-
+context-menu-2.2.16.tgz (GET)
+#10 13.97 Progress: resolved 482, reused 0, downloaded 94, added 94
+#10 14.97 Progress: resolved 482, reused 0, downloaded 108, added 108
+#10 15.65 ΓÇëWARNΓÇë Tarball download average speed 7 KiB/s (size 13 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/debug/-/debug-4.4.3.tgz (GET)
+#10 15.74 ΓÇëWARNΓÇë Tarball download average speed 33 KiB/s (size 135 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz (GET)
+#10 15.98 Progress: resolved 482, reused 0, downloaded 119, added 119
+#10 16.00 ΓÇëWARNΓÇë Tarball download average speed 5 KiB/s (size 10 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@floating-ui/react-dom/-/react-dom-2.1.8.tgz (GET)
+#10 16.59 ΓÇëWARNΓÇë Tarball download average speed 14 KiB/s (size 45 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@vercel/analytics/-/analytics-1.6.1.tgz (GET)
+#10 17.00 Progress: resolved 482, reused 0, downloaded 125, added 124
+#10 17.19 ΓÇëWARNΓÇë Tarball download average speed 24 KiB/s (size 92 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@hookform/resolvers/-/resolvers-3.10.0.tgz (GET)
+#10 17.48 ΓÇëWARNΓÇë Tarball download average speed 41 KiB/s (size 164 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@babel/traverse/-/traverse-7.29.0.tgz (GET)
+#10 18.00 Progress: resolved 482, reused 0, downloaded 148, added 148
+#10 18.88 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 2 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-use-layout-effect/-/r
+eact-use-layout-effect-1.1.1.tgz (GET)
+#10 19.00 Progress: resolved 482, reused 0, downloaded 160, added 160
+#10 19.86 ΓÇëWARNΓÇë Tarball download average speed 7 KiB/s (size 45 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-navigation-menu/-/rea
+ct-navigation-menu-1.2.14.tgz (GET)
+#10 19.91 ΓÇëWARNΓÇë Tarball download average speed 7 KiB/s (size 43 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@floating-ui/core/-/core-1.7.5.tgz 
+(GET)
+#10 20.00 Progress: resolved 482, reused 0, downloaded 168, added 168
+#10 20.92 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 6 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.29.3.tgz (GET)
+#10 21.00 Progress: resolved 482, reused 0, downloaded 174, added 174
+#10 21.51 ΓÇëWARNΓÇë Tarball download average speed 1 KiB/s (size 8 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-toggle-group/-/react-
+toggle-group-1.1.11.tgz (GET)
+#10 22.00 Progress: resolved 482, reused 0, downloaded 180, added 180
+#10 22.42 ΓÇëWARNΓÇë Tarball download average speed 7 KiB/s (size 20 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/d3-time-format/-/d3-time-format-4.1.0.tgz (GET)
+#10 22.55 ΓÇëWARNΓÇë Tarball download average speed 20 KiB/s (size 68 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/sonner/-/sonner-1.7.4.tgz (GET)
+#10 23.00 Progress: resolved 482, reused 0, downloaded 189, added 189
+#10 23.04 ΓÇëWARNΓÇë Tarball download average speed 15 KiB/s (size 113 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/embla-carousel/-/embla-carousel-8.6.0.tgz (GET)
+#10 24.00 Progress: resolved 482, reused 0, downloaded 205, added 205
+#10 25.00 Progress: resolved 482, reused 0, downloaded 218, added 218
+#10 25.74 ΓÇëWARNΓÇë Tarball download average speed 2 KiB/s (size 13 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/d3-time/-/d3-time-3.1.0.tgz (GET)
+#10 26.00 Progress: resolved 482, reused 0, downloaded 235, added 235
+#10 27.01 Progress: resolved 482, reused 0, downloaded 244, added 244
+#10 27.73 ΓÇëWARNΓÇë Tarball download average speed 2 KiB/s (size 33 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@floating-ui/dom/-/dom-1.7.6.tgz 
+(GET)
+#10 28.01 Progress: resolved 482, reused 0, downloaded 266, added 266
+#10 28.26 ΓÇëWARNΓÇë Tarball download average speed 1 KiB/s (size 17 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@img/colour/-/colour-1.1.0.tgz (GET)
+#10 29.01 Progress: resolved 482, reused 0, downloaded 308, added 308
+#10 29.34 ΓÇëWARNΓÇë Tarball download average speed 25 KiB/s (size 428 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@babel/parser/-/parser-7.29.3.tgz 
+(GET)
+#10 29.44 ΓÇëWARNΓÇë Tarball download average speed 44 KiB/s (size 402 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz (GET)
+#10 29.44 ΓÇëWARNΓÇë Tarball download average speed 10 KiB/s (size 87 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz (GET)
+#10 29.79 ΓÇëWARNΓÇë Tarball download average speed 3 KiB/s (size 46 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/postcss/-/postcss-8.5.10.tgz (GET)
+#10 29.93 Progress: resolved 482, reused 0, downloaded 362, added 362
+#10 30.93 Progress: resolved 482, reused 0, downloaded 387, added 387
+#10 31.93 Progress: resolved 482, reused 0, downloaded 410, added 410
+#10 32.93 Progress: resolved 482, reused 0, downloaded 423, added 423
+#10 33.93 Progress: resolved 482, reused 0, downloaded 427, added 427
+#10 34.29 ΓÇëWARNΓÇë Tarball download average speed 6 KiB/s (size 9 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/array.prototype.findlast/-/array.prot
+otype.findlast-1.2.5.tgz (GET)
+#10 34.83 ΓÇëWARNΓÇë Tarball download average speed 7 KiB/s (size 21 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz (GET)
+#10 34.88 ΓÇëWARNΓÇë Tarball download average speed 5 KiB/s (size 50 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/d3-shape/-/d3-shape-3.2.0.tgz (GET)
+#10 34.93 Progress: resolved 482, reused 0, downloaded 433, added 433
+#10 35.93 Progress: resolved 482, reused 0, downloaded 439, added 439
+#10 36.93 Progress: resolved 482, reused 0, downloaded 445, added 445
+#10 37.94 Progress: resolved 482, reused 0, downloaded 452, added 452
+#10 38.80 ΓÇëWARNΓÇë Tarball download average speed 28 KiB/s (size 33 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/jsx-ast-utils/-/jsx-ast-utils-3.3.5.tgz (GET)
+#10 38.93 Progress: resolved 482, reused 0, downloaded 453, added 453
+#10 38.97 ΓÇëWARNΓÇë Tarball download average speed 6 KiB/s (size 149 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/react-day-picker/-/react-day-picker-9.13.2.tgz (GET)
+#10 39.08 ΓÇëWARNΓÇë Tarball download average speed 4 KiB/s (size 16 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/ignore/-/ignore-7.0.5.tgz (GET)
+#10 39.64 ΓÇëWARNΓÇë Tarball download average speed 8 KiB/s (size 41 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/hermes-estree/-/hermes-estree-0.25.1.tgz (GET)
+#10 39.94 Progress: resolved 482, reused 0, downloaded 456, added 456
+#10 40.63 ΓÇëWARNΓÇë Tarball download average speed 8 KiB/s (size 71 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@typescript-eslint/typescript-estree/
+-/typescript-estree-8.59.1.tgz (GET)
+#10 40.94 Progress: resolved 482, reused 0, downloaded 457, added 457
+#10 42.12 ΓÇëWARNΓÇë Tarball download average speed 6 KiB/s (size 47 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/es-iterator-helpers/-/es-iterator-helpers-1.3.2.tgz 
+(GET)
+#10 42.14 Progress: resolved 482, reused 0, downloaded 458, added 457
+#10 43.15 Progress: resolved 482, reused 0, downloaded 458, added 458
+#10 44.15 Progress: resolved 482, reused 0, downloaded 460, added 460
+#10 45.15 Progress: resolved 482, reused 0, downloaded 462, added 462
+#10 46.43 Progress: resolved 482, reused 0, downloaded 463, added 462
+#10 47.43 Progress: resolved 482, reused 0, downloaded 463, added 463
+#10 49.60 ΓÇëWARNΓÇë Tarball download average speed 3 KiB/s (size 64 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@typescript-eslint/scope-manager/-/sc
+ope-manager-8.59.1.tgz (GET)
+#10 49.66 Progress: resolved 482, reused 0, downloaded 464, added 463
+#10 50.66 Progress: resolved 482, reused 0, downloaded 464, added 464
+#10 50.67 ΓÇëWARNΓÇë Tarball download average speed 33 KiB/s (size 585 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-pl
+ugin-react-hooks-7.1.1.tgz (GET)
+#10 51.66 Progress: resolved 482, reused 0, downloaded 465, added 465
+#10 55.81 ΓÇëWARNΓÇë Tarball download average speed 12 KiB/s (size 434 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@types/node/-/node-22.19.17.tgz (GET)
+#10 55.85 Progress: resolved 482, reused 0, downloaded 466, added 465
+#10 56.85 Progress: resolved 482, reused 0, downloaded 466, added 466
+#10 58.00 ΓÇëWARNΓÇë Tarball download average speed 1 KiB/s (size 33 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/fraction.js/-/fraction.js-5.3.4.tgz 
+(GET)
+#10 58.01 Progress: resolved 482, reused 0, downloaded 467, added 466
+#10 59.01 Progress: resolved 482, reused 0, downloaded 467, added 467
+#10 63.88 Progress: resolved 482, reused 0, downloaded 468, added 467
+#10 64.88 Progress: resolved 482, reused 0, downloaded 468, added 468
+#10 65.88 Progress: resolved 482, reused 0, downloaded 469, added 469
+#10 79.24 ΓÇëWARNΓÇë Tarball download average speed 16 KiB/s (size 950 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/date-fns-jalali/-/date-fns-jalali-4.1.0-0.tgz (GET)
+#10 79.68 Progress: resolved 482, reused 0, downloaded 470, added 469
+#10 80.68 Progress: resolved 482, reused 0, downloaded 470, added 470
+#10 81.39 ΓÇëWARNΓÇë GET https://registry.npmjs.org/@tailwindcss/oxide-linux-x64
+-musl/-/oxide-linux-x64-musl-4.2.3.tgz error (ERR_SOCKET_TIMEOUT). Will retry 
+in 10 seconds. 2 retries left.
+#10 85.60 ΓÇëWARNΓÇë GET 
+https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz error 
+(ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+#10 86.00 ΓÇëWARNΓÇë Tarball download average speed 11 KiB/s (size 584 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/axe-core/-/axe-core-4.11.4.tgz (GET)
+#10 86.06 Progress: resolved 482, reused 0, downloaded 471, added 470
+#10 87.06 Progress: resolved 482, reused 0, downloaded 471, added 471
+#10 88.23 ΓÇëWARNΓÇë GET 
+https://registry.npmjs.org/node-exports-info/-/node-exports-info-1.6.0.tgz 
+error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+#10 93.14 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 5 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/resolve-pkg-maps/-/resolve-pkg-maps-1.0.0.tgz (GET)
+#10 93.17 Progress: resolved 482, reused 0, downloaded 472, added 471
+#10 ...
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 94.00 Lockfile is up to date, resolution step is skipped
+#9 94.11 Progress: resolved 1, reused 0, downloaded 0, added 0
+#9 94.28 Packages: +201
+#9 94.28 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#9 95.11 Progress: resolved 201, reused 0, downloaded 0, added 0
+#9 96.11 Progress: resolved 201, reused 0, downloaded 24, added 24
+#9 97.11 Progress: resolved 201, reused 0, downloaded 62, added 62
+#9 97.25 ΓÇëWARNΓÇë Tarball download average speed 2 KiB/s (size 4 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-primitive/-/react-pri
+mitive-2.1.3.tgz (GET)
+#9 97.26 ΓÇëWARNΓÇë Tarball download average speed 6 KiB/s (size 10 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-dismissable-layer/-/r
+eact-dismissable-layer-1.1.11.tgz (GET)
+#9 98.11 Progress: resolved 201, reused 0, downloaded 80, added 80
+#9 99.11 Progress: resolved 201, reused 0, downloaded 102, added 102
+#9 99.17 ΓÇëWARNΓÇë Tarball download average speed 2 KiB/s (size 7 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@radix-ui/react-presence/-/react-presence-1.1.5.tgz 
+(GET)
+#9 99.26 ΓÇëWARNΓÇë Tarball download average speed 6 KiB/s (size 24 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-collection/-/react-co
+llection-1.1.7.tgz (GET)
+#9 100.1 Progress: resolved 201, reused 0, downloaded 117, added 117
+#9 101.1 Progress: resolved 201, reused 0, downloaded 125, added 125
+#9 102.1 Progress: resolved 201, reused 0, downloaded 128, added 128
+#9 103.1 ΓÇëWARNΓÇë Tarball download average speed 1 KiB/s (size 4 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/use-sync-external-store/-/use-sync-ex
+ternal-store-1.6.0.tgz (GET)
+#9 103.1 Progress: resolved 201, reused 0, downloaded 130, added 130
+#9 103.9 ΓÇëWARNΓÇë Tarball download average speed 24 KiB/s (size 116 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linu
+xmusl-x64-0.34.5.tgz (GET)
+#9 104.1 Progress: resolved 201, reused 0, downloaded 138, added 138
+#9 ...
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 94.17 Progress: resolved 482, reused 0, downloaded 472, added 472
+#10 95.63 Progress: resolved 482, reused 0, downloaded 473, added 472
+#10 96.63 Progress: resolved 482, reused 0, downloaded 473, added 473
+#10 98.24 Progress: resolved 482, reused 0, downloaded 474, added 473
+#10 99.24 Progress: resolved 482, reused 0, downloaded 474, added 474
+#10 ...
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 105.0 ΓÇëWARNΓÇë Tarball download average speed 6 KiB/s (size 52 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.15.tgz 
+(GET)
+#9 105.0 ΓÇëWARNΓÇë Tarball download average speed 5 KiB/s (size 45 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@vercel/analytics/-/analytics-1.6.1.tgz (GET)
+#9 105.1 Progress: resolved 201, reused 0, downloaded 141, added 141
+#9 105.3 ΓÇëWARNΓÇë Tarball download average speed 13 KiB/s (size 110 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@babel/generator/-/generator-7.29.1.tgz (GET)
+#9 105.3 ΓÇëWARNΓÇë Tarball download average speed 4 KiB/s (size 33 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@floating-ui/dom/-/dom-1.7.6.tgz 
+(GET)
+#9 106.1 Progress: resolved 201, reused 0, downloaded 166, added 166
+#9 106.6 ΓÇëWARNΓÇë Tarball download average speed 20 KiB/s (size 164 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@babel/traverse/-/traverse-7.29.0.tgz (GET)
+#9 107.1 Progress: resolved 201, reused 0, downloaded 170, added 170
+#9 109.8 ΓÇëWARNΓÇë Tarball download average speed 37 KiB/s (size 163 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-3.5.0.tgz (GET)
+#9 109.8 Progress: resolved 201, reused 0, downloaded 171, added 170
+#9 110.8 Progress: resolved 201, reused 0, downloaded 172, added 172
+#9 111.4 ΓÇëWARNΓÇë Tarball download average speed 4 KiB/s (size 34 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/recharts-scale/-/recharts-scale-0.4.5.tgz (GET)
+#9 111.4 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 6 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-use-controllable-stat
+e/-/react-use-controllable-state-1.2.2.tgz (GET)
+#9 111.8 Progress: resolved 201, reused 0, downloaded 174, added 174
+#9 112.3 ΓÇëWARNΓÇë Tarball download average speed 18 KiB/s (size 81 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/victory-vendor/-/victory-vendor-36.9.2.tgz (GET)
+#9 112.8 Progress: resolved 201, reused 0, downloaded 176, added 176
+#9 113.0 ΓÇëWARNΓÇë Tarball download average speed 22 KiB/s (size 322 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001788.tgz (GET)
+#9 113.8 Progress: resolved 201, reused 0, downloaded 178, added 178
+#9 117.9 ΓÇëWARNΓÇë Tarball download average speed 26 KiB/s (size 294 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@babel/types/-/types-7.29.0.tgz (GET)
+#9 118.0 Progress: resolved 201, reused 0, downloaded 179, added 178
+#9 ...
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 118.9 ΓÇëWARNΓÇë Tarball download average speed 10 KiB/s (size 945 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/recharts/-/recharts-2.15.0.tgz (GET)
+#10 119.0 Progress: resolved 482, reused 0, downloaded 475, added 474
+#10 119.9 Progress: resolved 482, reused 0, downloaded 475, added 475
+#10 122.2 ΓÇëWARNΓÇë Tarball download average speed 2 KiB/s (size 218 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/react-resizable-panels/-/react-resiza
+ble-panels-2.1.9.tgz (GET)
+#10 122.2 Progress: resolved 482, reused 0, downloaded 476, added 475
+#10 123.2 Progress: resolved 482, reused 0, downloaded 476, added 476
+#10 ...
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 119.0 Progress: resolved 201, reused 0, downloaded 179, added 179
+#9 119.9 Progress: resolved 201, reused 0, downloaded 180, added 180
+#9 120.1 ΓÇëWARNΓÇë GET 
+https://registry.npmjs.org/react-smooth/-/react-smooth-4.0.4.tgz error 
+(ECONNRESET). Will retry in 10 seconds. 2 retries left.
+#9 122.1 Progress: resolved 201, reused 0, downloaded 181, added 180
+#9 123.1 Progress: resolved 201, reused 0, downloaded 181, added 181
+#9 124.3 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 8 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/xterm-addon-web-links/-/xterm-addon-w
+eb-links-0.6.0.tgz (GET)
+#9 124.3 Progress: resolved 201, reused 0, downloaded 182, added 181
+#9 125.3 Progress: resolved 201, reused 0, downloaded 182, added 182
+#9 126.3 ΓÇëWARNΓÇë Request took 32475ms: https://registry.npmjs.org/pnpm
+#9 127.4 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 10 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@radix-ui/react-focus-scope/-/react-f
+ocus-scope-1.1.7.tgz (GET)
+#9 127.4 Progress: resolved 201, reused 0, downloaded 183, added 182
+#9 128.3 ΓÇëWARNΓÇë Tarball download average speed 1 KiB/s (size 34 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz (GET)
+#9 128.4 Progress: resolved 201, reused 0, downloaded 185, added 185
+#9 129.4 Progress: resolved 201, reused 0, downloaded 186, added 186
+#9 130.4 Progress: resolved 201, reused 0, downloaded 189, added 189
+#9 ...
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 144.1 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 14 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/@jridgewell/remapping/-/remapping-2.3.5.tgz (GET)
+#10 144.2 Progress: resolved 482, reused 0, downloaded 477, added 476
+#10 145.2 Progress: resolved 482, reused 0, downloaded 477, added 477
+#10 ...
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 147.5 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 44 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/postcss/-/postcss-8.4.31.tgz (GET)
+#9 147.5 Progress: resolved 201, reused 0, downloaded 190, added 189
+#9 148.5 Progress: resolved 201, reused 0, downloaded 190, added 190
+#9 ...
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 159.9 Progress: resolved 482, reused 0, downloaded 478, added 477
+#10 160.9 Progress: resolved 482, reused 0, downloaded 478, added 478
+#10 ...
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 167.2 ΓÇëWARNΓÇë Tarball download average speed 46 KiB/s (size 3126 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/date-fns/-/date-fns-4.1.0.tgz (GET)
+#9 167.6 Progress: resolved 201, reused 0, downloaded 191, added 190
+#9 168.6 Progress: resolved 201, reused 0, downloaded 191, added 191
+#9 169.9 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 37 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/vaul/-/vaul-1.1.2.tgz (GET)
+#9 169.9 Progress: resolved 201, reused 0, downloaded 192, added 191
+#9 170.9 Progress: resolved 201, reused 0, downloaded 192, added 192
+#9 172.8 Progress: resolved 201, reused 0, downloaded 193, added 192
+#9 173.8 Progress: resolved 201, reused 0, downloaded 193, added 193
+#9 176.6 ΓÇëWARNΓÇë Tarball download average speed 15 KiB/s (size 1246 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/react-dom/-/react-dom-19.2.4.tgz 
+(GET)
+#9 176.7 Progress: resolved 201, reused 0, downloaded 194, added 193
+#9 177.5 ΓÇëWARNΓÇë Tarball download average speed 2 KiB/s (size 218 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/react-resizable-panels/-/react-resiza
+ble-panels-2.1.9.tgz (GET)
+#9 177.7 Progress: resolved 201, reused 0, downloaded 195, added 195
+#9 ...
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 167.7 ΓÇëWARNΓÇë Tarball download average speed 16 KiB/s (size 1249 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-musl/-/o
+xide-linux-x64-musl-4.2.3.tgz (GET)
+#10 167.8 Progress: resolved 482, reused 0, downloaded 479, added 478
+#10 168.8 Progress: resolved 482, reused 0, downloaded 479, added 479
+#10 170.6 ΓÇëWARNΓÇë Tarball download average speed 20 KiB/s (size 3126 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/date-fns/-/date-fns-4.1.0.tgz (GET)
+#10 171.1 Progress: resolved 482, reused 0, downloaded 480, added 479
+#10 172.1 Progress: resolved 482, reused 0, downloaded 480, added 480
+#10 ...
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 178.7 ΓÇëWARNΓÇë Tarball download average speed 9 KiB/s (size 723 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/motion-dom/-/motion-dom-12.38.0.tgz 
+(GET)
+#9 178.8 Progress: resolved 201, reused 0, downloaded 196, added 195
+#9 179.7 Progress: resolved 201, reused 0, downloaded 196, added 196
+#9 182.8 ΓÇëWARNΓÇë Tarball download average speed 11 KiB/s (size 945 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/recharts/-/recharts-2.15.0.tgz (GET)
+#9 182.9 Progress: resolved 201, reused 0, downloaded 197, added 196
+#9 183.9 Progress: resolved 201, reused 0, downloaded 197, added 197
+#9 225.5 ΓÇëWARNΓÇë Tarball download average speed 0 KiB/s (size 25 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/dom-helpers/-/dom-helpers-5.2.1.tgz 
+(GET)
+#9 225.5 Progress: resolved 201, reused 0, downloaded 198, added 197
+#9 226.5 Progress: resolved 201, reused 0, downloaded 198, added 198
+#9 227.9 Progress: resolved 201, reused 0, downloaded 199, added 198
+#9 228.9 Progress: resolved 201, reused 0, downloaded 199, added 199
+#9 ...
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 237.1 Progress: resolved 482, reused 0, downloaded 481, added 480
+#10 238.1 Progress: resolved 482, reused 0, downloaded 481, added 481
+#10 ...
+
+#9 [runner 4/7] RUN corepack enable && corepack prepare pnpm@latest --activate 
+&& pnpm install --frozen-lockfile --prod
+#9 255.6 ΓÇëWARNΓÇë Tarball download average speed 1 KiB/s (size 184 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/@babel/helpers/-/helpers-7.29.2.tgz 
+(GET)
+#9 255.6 Progress: resolved 201, reused 0, downloaded 200, added 199
+#9 256.6 Progress: resolved 201, reused 0, downloaded 200, added 200
+#9 266.7 ΓÇëWARNΓÇë Tarball download average speed 3 KiB/s (size 569 KiB) is 
+below 50 KiB/s: https://registry.npmjs.org/zod/-/zod-3.25.76.tgz (GET)
+#9 266.8 Progress: resolved 201, reused 0, downloaded 201, added 200
+#9 266.8 Progress: resolved 201, reused 0, downloaded 201, added 201, done
+#9 267.0 
+#9 267.0 dependencies:
+#9 267.0 + @hookform/resolvers 3.10.0
+#9 267.0 + @radix-ui/react-accordion 1.2.12
+#9 267.0 + @radix-ui/react-alert-dialog 1.1.15
+#9 267.0 + @radix-ui/react-aspect-ratio 1.1.8
+#9 267.0 + @radix-ui/react-avatar 1.1.11
+#9 267.0 + @radix-ui/react-checkbox 1.3.3
+#9 267.0 + @radix-ui/react-collapsible 1.1.12
+#9 267.0 + @radix-ui/react-context-menu 2.2.16
+#9 267.0 + @radix-ui/react-dialog 1.1.15
+#9 267.0 + @radix-ui/react-dropdown-menu 2.1.16
+#9 267.0 + @radix-ui/react-hover-card 1.1.15
+#9 267.0 + @radix-ui/react-label 2.1.8
+#9 267.0 + @radix-ui/react-menubar 1.1.16
+#9 267.0 + @radix-ui/react-navigation-menu 1.2.14
+#9 267.0 + @radix-ui/react-popover 1.1.15
+#9 267.0 + @radix-ui/react-progress 1.1.8
+#9 267.0 + @radix-ui/react-radio-group 1.3.8
+#9 267.0 + @radix-ui/react-scroll-area 1.2.10
+#9 267.0 + @radix-ui/react-select 2.2.6
+#9 267.0 + @radix-ui/react-separator 1.1.8
+#9 267.0 + @radix-ui/react-slider 1.3.6
+#9 267.0 + @radix-ui/react-slot 1.2.4
+#9 267.0 + @radix-ui/react-switch 1.2.6
+#9 267.0 + @radix-ui/react-tabs 1.1.13
+#9 267.0 + @radix-ui/react-toast 1.2.15
+#9 267.0 + @radix-ui/react-toggle 1.1.10
+#9 267.0 + @radix-ui/react-toggle-group 1.1.11
+#9 267.0 + @radix-ui/react-tooltip 1.2.8
+#9 267.0 + @vercel/analytics 1.6.1
+#9 267.0 + autoprefixer 10.5.0
+#9 267.0 + class-variance-authority 0.7.1
+#9 267.0 + clsx 2.1.1
+#9 267.0 + cmdk 1.1.1
+#9 267.0 + date-fns 4.1.0
+#9 267.0 + embla-carousel-react 8.6.0
+#9 267.0 + framer-motion 12.38.0
+#9 267.0 + input-otp 1.4.2
+#9 267.0 + lucide-react 0.564.0
+#9 267.0 + next 16.2.4
+#9 267.0 + next-themes 0.4.6
+#9 267.0 + react 19.2.4
+#9 267.0 + react-day-picker 9.13.2
+#9 267.0 + react-dom 19.2.4
+#9 267.0 + react-hook-form 7.73.1
+#9 267.0 + react-resizable-panels 2.1.9
+#9 267.0 + recharts 2.15.0
+#9 267.0 + sonner 1.7.4
+#9 267.0 + tailwind-merge 3.5.0
+#9 267.0 + vaul 1.1.2
+#9 267.0 + xterm 5.3.0
+#9 267.0 + xterm-addon-fit 0.7.0
+#9 267.0 + xterm-addon-web-links 0.6.0
+#9 267.0 + zod 3.25.76
+#9 267.0 
+#9 267.0 devDependencies: skipped
+#9 267.0 
+#9 267.1 Γò¡ Warning ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö
+ÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+öÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓò«
+#9 267.1 Γöé                                                                    
+          Γöé
+#9 267.1 Γöé   Ignored build scripts: sharp@0.34.5.                             
+          Γöé
+#9 267.1 Γöé   Run "pnpm approve-builds" to pick which dependencies should be 
+allowed     Γöé
+#9 267.1 Γöé   to run scripts.                                                  
+          Γöé
+#9 267.1 Γöé                                                                    
+          Γöé
+#9 267.1 Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö
+ÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+öÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöÇΓöÇΓò»
+#9 267.1 Done in 2m 53.8s using pnpm v10.33.2
+#9 DONE 267.5s
+
+#10 [builder 4/6] RUN corepack enable && corepack prepare pnpm@latest 
+--activate && pnpm install --frozen-lockfile
+#10 293.4 ΓÇëWARNΓÇë Tarball download average speed 11 KiB/s (size 3278 KiB) is 
+below 50 KiB/s: 
+https://registry.npmjs.org/lucide-react/-/lucide-react-0.564.0.tgz (GET)
+#10 294.2 Progress: resolved 482, reused 0, downloaded 482, added 481
+#10 294.3 Progress: resolved 482, reused 0, downloaded 482, added 482, done
+#10 294.7 
+#10 294.7 dependencies:
+#10 294.7 + @hookform/resolvers 3.10.0
+#10 294.7 + @radix-ui/react-accordion 1.2.12
+#10 294.7 + @radix-ui/react-alert-dialog 1.1.15
+#10 294.7 + @radix-ui/react-aspect-ratio 1.1.8
+#10 294.7 + @radix-ui/react-avatar 1.1.11
+#10 294.7 + @radix-ui/react-checkbox 1.3.3
+#10 294.7 + @radix-ui/react-collapsible 1.1.12
+#10 294.7 + @radix-ui/react-context-menu 2.2.16
+#10 294.7 + @radix-ui/react-dialog 1.1.15
+#10 294.7 + @radix-ui/react-dropdown-menu 2.1.16
+#10 294.7 + @radix-ui/react-hover-card 1.1.15
+#10 294.7 + @radix-ui/react-label 2.1.8
+#10 294.7 + @radix-ui/react-menubar 1.1.16
+#10 294.7 + @radix-ui/react-navigation-menu 1.2.14
+#10 294.7 + @radix-ui/react-popover 1.1.15
+#10 294.7 + @radix-ui/react-progress 1.1.8
+#10 294.7 + @radix-ui/react-radio-group 1.3.8
+#10 294.7 + @radix-ui/react-scroll-area 1.2.10
+#10 294.7 + @radix-ui/react-select 2.2.6
+#10 294.7 + @radix-ui/react-separator 1.1.8
+#10 294.7 + @radix-ui/react-slider 1.3.6
+#10 294.7 + @radix-ui/react-slot 1.2.4
+#10 294.7 + @radix-ui/react-switch 1.2.6
+#10 294.7 + @radix-ui/react-tabs 1.1.13
+#10 294.7 + @radix-ui/react-toast 1.2.15
+#10 294.7 + @radix-ui/react-toggle 1.1.10
+#10 294.7 + @radix-ui/react-toggle-group 1.1.11
+#10 294.7 + @radix-ui/react-tooltip 1.2.8
+#10 294.7 + @vercel/analytics 1.6.1
+#10 294.7 + autoprefixer 10.5.0
+#10 294.7 + class-variance-authority 0.7.1
+#10 294.7 + clsx 2.1.1
+#10 294.7 + cmdk 1.1.1
+#10 294.7 + date-fns 4.1.0
+#10 294.7 + embla-carousel-react 8.6.0
+#10 294.7 + framer-motion 12.38.0
+#10 294.7 + input-otp 1.4.2
+#10 294.7 + lucide-react 0.564.0
+#10 294.7 + next 16.2.4
+#10 294.7 + next-themes 0.4.6
+#10 294.7 + react 19.2.4
+#10 294.7 + react-day-picker 9.13.2
+#10 294.7 + react-dom 19.2.4
+#10 294.7 + react-hook-form 7.73.1
+#10 294.7 + react-resizable-panels 2.1.9
+#10 294.7 + recharts 2.15.0
+#10 294.7 + sonner 1.7.4
+#10 294.7 + tailwind-merge 3.5.0
+#10 294.7 + vaul 1.1.2
+#10 294.7 + xterm 5.3.0
+#10 294.7 + xterm-addon-fit 0.7.0
+#10 294.7 + xterm-addon-web-links 0.6.0
+#10 294.7 + zod 3.25.76
+#10 294.7 
+#10 294.7 devDependencies:
+#10 294.7 + @tailwindcss/postcss 4.2.3
+#10 294.7 + @types/node 22.19.17
+#10 294.7 + @types/react 19.2.14
+#10 294.7 + @types/react-dom 19.2.3
+#10 294.7 + eslint 9.39.4
+#10 294.7 + eslint-config-next 16.2.4
+#10 294.7 + postcss 8.5.10
+#10 294.7 + tailwindcss 4.2.3
+#10 294.7 + tw-animate-css 1.3.3
+#10 294.7 + typescript 5.7.3
+#10 294.7 
+#10 294.7 Γò¡ Warning ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+öÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓò«
+#10 294.7 Γöé                                                                   
+           Γöé
+#10 294.7 Γöé   Ignored build scripts: sharp@0.34.5, unrs-resolver@1.11.1.      
+           Γöé
+#10 294.7 Γöé   Run "pnpm approve-builds" to pick which dependencies should be 
+allowed     Γöé
+#10 294.7 Γöé   to run scripts.                                                 
+           Γöé
+#10 294.7 Γöé                                                                   
+           Γöé
+#10 294.7 Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+öÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö
+ÇΓöÇΓöÇΓò»
+#10 294.8 Done in 4m 45.7s using pnpm v10.33.2
+#10 DONE 295.3s
+
+#11 [builder 5/6] COPY . .
+#11 DONE 110.0s
+
+#12 [builder 6/6] RUN pnpm run build
+#12 6.210 
+#12 6.210 > my-project@0.1.0 build /app
+#12 6.210 > next build
+#12 6.210 
+#12 6.378 node:internal/modules/cjs/loader:1210
+#12 6.378   throw err;
+#12 6.378   ^
+#12 6.378 
+#12 6.378 Error: Cannot find module '/app/node_modules/next/dist/bin/next'
+#12 6.378     at Module._resolveFilename 
+(node:internal/modules/cjs/loader:1207:15)
+#12 6.378     at Module._load (node:internal/modules/cjs/loader:1038:27)
+#12 6.378     at Function.executeUserEntryPoint [as runMain] 
+(node:internal/modules/run_main:164:12)
+#12 6.378     at node:internal/main/run_main_module:28:49 {
+#12 6.378   code: 'MODULE_NOT_FOUND',
+#12 6.378   requireStack: []
+#12 6.378 }
+#12 6.378 
+#12 6.378 Node.js v20.20.2
+#12 6.419 ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.
+#12 ERROR: process "/bin/sh -c pnpm run build" did not complete successfully: 
+exit code: 1
+------
+ > [builder 6/6] RUN pnpm run build:
+6.378     at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+6.378     at Module._load (node:internal/modules/cjs/loader:1038:27)
+6.378     at Function.executeUserEntryPoint [as runMain] 
+(node:internal/modules/run_main:164:12)
+6.378     at node:internal/main/run_main_module:28:49 {
+6.378   code: 'MODULE_NOT_FOUND',
+6.378   requireStack: []
+6.378 }
+6.378 
+6.378 Node.js v20.20.2
+6.419 ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.
+------
+Dockerfile:10
+--------------------
+   8 |     
+   9 |     COPY . .
+  10 | >>> RUN pnpm run build
+  11 |     
+  12 |     # Stage 2: Run
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c pnpm run build" 
+did not complete successfully: exit code: 1
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux
+/zdh5kcm4uls64mx683iuhc7zx
