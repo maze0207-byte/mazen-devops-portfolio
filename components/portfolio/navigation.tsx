@@ -4,18 +4,21 @@ import { useState, useEffect } from "react"
 import { Menu, X, Terminal } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import { FeedbackDialog } from "./feedback-dialog"
 
 const navLinks = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
+  { href: "#infrastructure", label: "Test lab" },
   { href: "#contact", label: "Contact" },
 ]
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,19 +60,19 @@ export function Navigation() {
               </a>
             ))}
             <Link
-              href="/test-infrastructure"
+              href="#terminal"
               className="flex items-center gap-2 px-3 py-1.5 text-sm text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all relative group"
             >
               <Terminal size={14} />
               <span>Test Lab</span>
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             </Link>
-            <a
-              href="#contact"
+            <button
+              onClick={() => setIsFeedbackOpen(true)}
               className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
             >
               Let&apos;s Talk
-            </a>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -104,24 +107,28 @@ export function Navigation() {
                 </a>
               ))}
               <Link
-                href="/test-infrastructure"
+                href="#terminal"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center justify-center gap-2 w-full px-4 py-2 text-cyan-400 border border-cyan-500/30 rounded-lg"
               >
                 <Terminal size={16} />
                 <span>Test Lab</span>
               </Link>
-              <a
-                href="#contact"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium rounded-lg"
+              <button
+                onClick={() => {
+                  setIsFeedbackOpen(true)
+                  setIsMobileMenuOpen(false)
+                }}
+                className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium rounded-lg"
               >
                 Let&apos;s Talk
-              </a>
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <FeedbackDialog open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen} />
     </nav>
   )
 }
