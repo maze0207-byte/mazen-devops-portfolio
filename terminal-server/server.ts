@@ -1,10 +1,12 @@
 import fs from "node:fs/promises"
+import path from "node:path"
 import { once } from "node:events"
 import Docker from "dockerode"
 import { WebSocketServer, WebSocket } from "ws"
 
 const PORT = 4000
 const IMAGE_NAME = "mazen-terminal-sandbox:latest"
+const SANDBOX_DIR = path.resolve(__dirname, "..", "terminal-sandbox")
 const MAX_SESSIONS = Number(process.env.MAX_SESSIONS ?? 5)
 const SESSION_TIMEOUT_MINUTES = Number(process.env.SESSION_TIMEOUT_MINUTES ?? 10)
 const KUBECONFIG_PATH = process.env.KUBECONFIG_PATH ?? "/kubeconfig"
@@ -12,6 +14,48 @@ const KUBECONFIG_PATH = process.env.KUBECONFIG_PATH ?? "/kubeconfig"
 const docker = new Docker({ socketPath: "/var/run/docker.sock" })
 const activeSessions = new Map<WebSocket, { container: Docker.Container; stream: any; timer: NodeJS.Timeout }>()
 const sessionTimestampsByIp = new Map<string, number[]>()
+
+let imageBuildPromise: Promise<void> | null = null
+
+async function buildSandboxImage() {
+  console.log(`Building sandbox image ${IMAGE_NAME} from ${SANDBOX_DIR}`)
+
+  const buildStream = await docker.buildImage(SANDBOX_DIR, { t: IMAGE_NAME })
+
+  await new Promise<void>((resolve, reject) => {
+    docker.modem.followProgress(
+      buildStream,
+      (err: Error | null) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        resolve()
+      },
+      (event: any) => {
+        if (event && event.stream) {
+          process.stdout.write(event.stream)
+        }
+      }
+    )
+  })
+
+  console.log(`Sandbox image ${IMAGE_NAME} built successfully.`)
+}
+
+async function ensureSandboxImage() {
+  if (imageBuildPromise) {
+    return imageBuildPromise
+  }
+
+  imageBuildPromise = buildSandboxImage()
+
+  try {
+    await imageBuildPromise
+  } finally {
+    imageBuildPromise = null
+  }
+}
 
 const wss = new WebSocketServer({ port: PORT })
 
@@ -126,6 +170,7 @@ wss.on("connection", async (ws, req) => {
   }
 
   try {
+    await ensureSandboxImage()
     const { container, stream } = await createSandboxSession()
 
     ws.send("Connected to sandbox terminal. Type help to begin.\n")
