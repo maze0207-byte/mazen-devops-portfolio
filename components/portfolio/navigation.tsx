@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, Terminal } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { FeedbackDialog } from "./feedback-dialog"
@@ -11,7 +11,7 @@ const navLinks = [
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
-  { href: "#infrastructure", label: "Test lab" },
+  { href: "#infrastructure", label: "04 / Infrastructure" },
   { href: "#contact", label: "Contact" },
 ]
 
@@ -59,14 +59,6 @@ export function Navigation() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <Link
-              href="#terminal"
-              className="flex items-center gap-2 px-3 py-1.5 text-sm text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all relative group"
-            >
-              <Terminal size={14} />
-              <span>Test Lab</span>
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            </Link>
             <button
               onClick={() => setIsFeedbackOpen(true)}
               className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
@@ -106,14 +98,6 @@ export function Navigation() {
                   {link.label}
                 </a>
               ))}
-              <Link
-                href="#terminal"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full px-4 py-2 text-cyan-400 border border-cyan-500/30 rounded-lg"
-              >
-                <Terminal size={16} />
-                <span>Test Lab</span>
-              </Link>
               <button
                 onClick={() => {
                   setIsFeedbackOpen(true)

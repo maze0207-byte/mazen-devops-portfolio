@@ -10,6 +10,9 @@ export function TerminalWindow({ className }: { className?: string }) {
   const xtermRef = useRef<any>(null)
   const fitAddonRef = useRef<any>(null)
   const [ready, setReady] = useState(false)
+  const [status, setStatus] = useState<"connecting" | "connected" | "disconnected">(
+    "connecting",
+  )
 
   const onMessage = useCallback((data: string) => {
     if (xtermRef.current) {
@@ -18,19 +21,19 @@ export function TerminalWindow({ className }: { className?: string }) {
   }, [])
 
   const { send, status: socketStatus } = useTerminalSocket(DEFAULT_WS_URL, onMessage)
-  const status = socketStatus
+
+  useEffect(() => {
+    setStatus(socketStatus)
+  }, [socketStatus])
 
   useEffect(() => {
     let fitObserver: ResizeObserver | null = null
     let resizeHandler: () => void
     let isMounted = true
 
-    let terminalElement: HTMLDivElement | null = null
-
     const initializeTerminal = async () => {
       if (!terminalRef.current || !isMounted) return
 
-      terminalElement = terminalRef.current
       const [{ Terminal }, { FitAddon }, { WebLinksAddon }] = await Promise.all([
         import("xterm"),
         import("xterm-addon-fit"),
@@ -58,7 +61,7 @@ export function TerminalWindow({ className }: { className?: string }) {
       const webLinksAddon = new WebLinksAddon()
       term.loadAddon(fitAddon)
       term.loadAddon(webLinksAddon)
-      term.open(terminalElement)
+      term.open(terminalRef.current)
       term.writeln("\x1b[32mWelcome to the Mazen DevOps live cluster terminal.\x1b[0m")
       term.writeln("Type \x1b[36mhelp\x1b[0m for available commands or use the shell prompt directly.")
       term.writeln("")
@@ -77,11 +80,11 @@ export function TerminalWindow({ className }: { className?: string }) {
         fitAddon.fit()
       }
 
-      if (typeof window.ResizeObserver !== "undefined" && terminalElement) {
+      if (typeof window.ResizeObserver !== "undefined") {
         fitObserver = new ResizeObserver(() => {
           fitAddon.fit()
         })
-        fitObserver.observe(terminalElement)
+        fitObserver.observe(terminalRef.current)
       }
 
       window.addEventListener("resize", resizeHandler)
@@ -91,8 +94,8 @@ export function TerminalWindow({ className }: { className?: string }) {
 
     return () => {
       isMounted = false
-      if (fitObserver && terminalElement) {
-        fitObserver.unobserve(terminalElement)
+      if (fitObserver && terminalRef.current) {
+        fitObserver.unobserve(terminalRef.current)
       }
       window.removeEventListener("resize", resizeHandler)
       if (xtermRef.current) {

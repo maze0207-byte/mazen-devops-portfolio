@@ -9,7 +9,7 @@ export function Terminal() {
   const isInView = useInView(ref, { once: true, margin: "-120px" })
 
   return (
-    <section id="terminal" ref={ref} className="relative py-24 bg-[#080a0f]">
+    <section ref={ref} className="relative py-24 bg-[#080a0f]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}

@@ -36,11 +36,7 @@ interface ConnectionStatus {
 }
 
 export default function TestInfrastructurePage() {
-  const [lines, setLines] = useState<TerminalLine[]>(() => [
-    { id: 1, type: "system", content: "DevOps Terminal v2.0 - Infrastructure Testing Environment", timestamp: new Date().toISOString() },
-    { id: 2, type: "system", content: "Type 'help' for available commands", timestamp: new Date().toISOString() },
-    { id: 3, type: "system", content: "─".repeat(60), timestamp: new Date().toISOString() },
-  ])
+  const [lines, setLines] = useState<TerminalLine[]>([])
   const [currentInput, setCurrentInput] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(null)
@@ -51,26 +47,18 @@ export default function TestInfrastructurePage() {
   
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const lineIdRef = useRef(3)
+  const lineIdRef = useRef(0)
 
   // Check connection status on mount
   useEffect(() => {
-    const fetchConnectionStatus = async () => {
-      try {
-        const response = await fetch("/api/terminal")
-        const data = await response.json()
-        setConnectionStatus(data)
-      } catch {
-        setConnectionStatus({
-          status: "error",
-          clusterConnected: false,
-          mode: "demo",
-          timestamp: new Date().toISOString(),
-        })
-      }
-    }
-
-    fetchConnectionStatus()
+    checkConnectionStatus()
+    // Add welcome message
+    setLines([
+      { id: 1, type: "system", content: "DevOps Terminal v2.0 - Infrastructure Testing Environment", timestamp: new Date().toISOString() },
+      { id: 2, type: "system", content: "Type 'help' for available commands", timestamp: new Date().toISOString() },
+      { id: 3, type: "system", content: "─".repeat(60), timestamp: new Date().toISOString() },
+    ])
+    lineIdRef.current = 3
   }, [])
 
   // Auto-scroll to bottom
@@ -87,6 +75,21 @@ export default function TestInfrastructurePage() {
     terminal?.addEventListener("click", handleClick)
     return () => terminal?.removeEventListener("click", handleClick)
   }, [])
+
+  const checkConnectionStatus = async () => {
+    try {
+      const response = await fetch("/api/terminal")
+      const data = await response.json()
+      setConnectionStatus(data)
+    } catch {
+      setConnectionStatus({
+        status: "error",
+        clusterConnected: false,
+        mode: "demo",
+        timestamp: new Date().toISOString(),
+      })
+    }
+  }
 
   const addLine = useCallback((type: TerminalLine["type"], content: string) => {
     lineIdRef.current += 1

@@ -3,11 +3,11 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install --frozen-lockfile
+COPY package*.json ./
+RUN npm install
 
 COPY . .
-RUN pnpm run build
+RUN npm run build
 
 # Stage 2: Run
 FROM node:20-alpine
@@ -20,4 +20,4 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+CMD ["npm", "start"]

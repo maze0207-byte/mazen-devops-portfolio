@@ -8,9 +8,7 @@ export function useTerminalSocket(
   url: string,
   onMessage: (message: string) => void,
 ) {
-  const [status, setStatus] = useState<TerminalStatus>(() =>
-    url ? "connecting" : "disconnected",
-  )
+  const [status, setStatus] = useState<TerminalStatus>("connecting")
   const socketRef = useRef<WebSocket | null>(null)
 
   const send = useCallback((payload: string) => {
@@ -21,12 +19,14 @@ export function useTerminalSocket(
 
   useEffect(() => {
     if (!url) {
+      setStatus("disconnected")
       return
     }
 
     const ws = new WebSocket(url)
     ws.binaryType = "arraybuffer"
     socketRef.current = ws
+    setStatus("connecting")
 
     ws.onopen = () => {
       setStatus("connected")
