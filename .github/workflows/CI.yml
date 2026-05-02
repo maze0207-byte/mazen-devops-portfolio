@@ -106,7 +106,8 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: false
+          push: false # do not push to registry
+          load: true # load image into runner for testing
           tags: ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
