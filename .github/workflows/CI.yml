@@ -2,9 +2,14 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches: ["fix-next-command", "main"]
   pull_request:
     branches: [main]
+
+# Global securty permissions for the workflow
+permissions:
+   contents: read # For checkout action
+   
 
 jobs:
   # ─────────────────────────────────────────
@@ -37,7 +42,10 @@ jobs:
 
       - name: Run ESLint
         run: pnpm lint
-
+    
+  # dependency vulnerability check (optional but recommended)
+      - name: Check for vulnerable dependencies
+        run: pnpm audit --audit-level=high
   # ─────────────────────────────────────────
   # Job 2: Build (Next.js)
   # ─────────────────────────────────────────
@@ -88,22 +96,60 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
+    # secret scan for Docker Hub credentials (optional but recommended)
+      - name: Check for Docker Hub credentials in code
+        uses: gitleaks/gitleaks-action@v3
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          args: "--path . --report-format json --report-path gitleaks_report.json --redact"
 
       - name: Build Docker image 
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: true 
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:latest
+          push: false
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+    # vulnerability scan for built Docker image (optional but recommended)
+      - name: Scan image 
+        uses: aquasecurity/trivy-action@v0.24.0
+        with:
+          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
+          format: 'table'
+          exit-code: '1' # fail if vulnerabilities are found
+          severity: 'HIGH,CRITICAL' # only report high and critical vulnerabilities
   
+  # ─────────────────────────────────────────
+  # Job 3: Docker Push  (only main)))
+  # ─────────────────────────────────────────
+
+  docker-push:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v6
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      -
+        name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
 
 
 
