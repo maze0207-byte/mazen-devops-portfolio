@@ -45,7 +45,7 @@ jobs:
     
   # dependency vulnerability check (optional but recommended)
       - name: Check for vulnerable dependencies
-        run: pnpm audit --audit-level=high
+        run: pnpm audit --audit-level=low
   # ─────────────────────────────────────────
   # Job 2: Build (Next.js)
   # ─────────────────────────────────────────
@@ -121,7 +121,7 @@ jobs:
           severity: 'HIGH,CRITICAL' # only report high and critical vulnerabilities
   
   # ─────────────────────────────────────────
-  # Job 3: Docker Push  (only main)))
+  # Job 4: Docker Push  (only main)))
   # ─────────────────────────────────────────
 
   docker-push:
@@ -156,7 +156,7 @@ jobs:
             ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:latest
             ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
   # ─────────────────────────────────────────
-  # Job 2: update Kubernetes Deployment (only main)
+  # Job 5: update Kubernetes Deployment (only main)
   # ─────────────────────────────────────────
   update-k8s-deployment:
     runs-on: ubuntu-latest
@@ -179,7 +179,7 @@ jobs:
           git add .
           git commit -m "Update image tag to ${{github.sha}}"
           git push origin main
-          
+
 
 
 
