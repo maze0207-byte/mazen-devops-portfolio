@@ -6,9 +6,9 @@ import { useRef } from "react"
 import { MapPin, Briefcase, Github, Mail, CheckCircle2 } from "lucide-react"
 
 const highlights = [
-  { icon: "☁️", title: "AWS", desc: "Primary Cloud" },
-  { icon: "⎈", title: "K8s", desc: "Container Orchestration" },
-  { icon: "🏗️", title: "IaC", desc: "Terraform / GitOps" },
+  { icon: "☁️", title: "AWS", desc: " Dr.omar" },
+  { icon: "⎈", title: "K8s", desc: "rahma ahmed " },
+  { icon: "🏗️", title: "IaC", desc: "mazen ahmed" },
   { icon: "🔄", title: "CI/CD", desc: "Pipeline Automation with GitHub Actions" },
 ]
 
