@@ -170,14 +170,18 @@ jobs:
       - name: update image tag in deployment.yaml
         run: |    
           cd portfolio-k8s
-          sed -i "s#image: .\+#image: ${{ vars.DOCKERHUB_USERNAME}} /mazen-devops-portfolio:${{github.sha}}#g" Deployment.yaml 
+          sed -i "s#image: .*#image: ${{ vars.DOCKERHUB_USERNAME}}/mazen-devops-portfolio:${{github.sha}}#g" deployment.yaml 
       - name: commit and push changes
         run: |
           cd portfolio-k8s
+
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+
           git add .
-          git commit -m "Update image tag to ${{github.sha}}"
+
+          git commit -m "Update image tag to ${{github.sha}} " || echo "No changes to commit"
+
           git push -u origin main
 
 
