@@ -167,10 +167,10 @@ jobs:
           git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/maze0207-byte/portfolio-k8s.git
           cd portfolio-k8s
           git checkout main
-      - name: update image tag in deployment.yaml
-        run: |    
+      - name: update image tag in Deployment.yaml
+        run: |
           cd portfolio-k8s
-          sed -i "s#image: .*#image: ${{ vars.DOCKERHUB_USERNAME}}/mazen-devops-portfolio:${{github.sha}}#g" deployment.yaml 
+          sed -i "s#image: .*#image: ${{ vars.DOCKERHUB_USERNAME}}/mazen-devops-portfolio:${{github.sha}}#g" Deployment.yaml
       - name: commit and push changes
         run: |
           cd portfolio-k8s
