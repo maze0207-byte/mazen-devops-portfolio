@@ -164,7 +164,7 @@ jobs:
     steps:
       - name: Clone Kubernetes repo
         run: |
-          git clone https://github.com/maze0207-byte/portfolio-k8s.git
+          git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/maze0207-byte/portfolio-k8s.git
           cd portfolio-k8s
           git checkout main
       - name: update image tag in deployment.yaml
@@ -178,7 +178,7 @@ jobs:
           git config user.email "github-actions@github.com"
           git add .
           git commit -m "Update image tag to ${{github.sha}}"
-          git push origin main
+          git push -u origin main
 
 
 
