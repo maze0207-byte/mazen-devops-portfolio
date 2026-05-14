@@ -9,7 +9,7 @@ const highlights = [
   { icon: "☁️", title: "AWS", desc: "Primary Cloud" },
   { icon: "⎈", title: "K8s", desc: "Container Orchestration" },
   { icon: "🏗️", title: "IaC", desc: "Terraform / GitOps" },
-  { icon: "🔄", title: "CI/CD", desc: "Pipeline Automation" },
+  { icon: "🔄", title: "CI/CD", desc: "Pipeline Automation with GitHub Actions" },
 ]
 
 const details = [

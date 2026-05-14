@@ -80,7 +80,8 @@
       "tar": "7.5.11",
       "minimatch": "10.2.5",
       "glob": "11.1.0",
-      "cross-spawn": "7.0.5"
+      "cross-spawn": "7.0.5",
+      "react-dom": "19.2.4"
     }
   }
 }

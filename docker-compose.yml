@@ -24,3 +24,16 @@ services:
       - MAX_SESSIONS=5
       - SESSION_TIMEOUT_MINUTES=10
     restart: unless-stopped
+  # terminal-sandbox:
+  #   image: ubuntu:latest
+  #   container_name: terminal-sandbox
+  #   working_dir: /terminal-sandbox
+  #   command: sleep infinity
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   environment:
+  #     - KUBECONFIG_PATH=/kubeconfig
+  #   restart: unless-stopped
+
+
+  

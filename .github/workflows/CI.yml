@@ -1,5 +1,6 @@
 name: CI
 
+
 on:
   push:
     branches: ["fix-next-command", "main"]
@@ -9,7 +10,6 @@ on:
 # Global securty permissions for the workflow
 permissions:
    contents: read # For checkout action
-   
 
 jobs:
   # ─────────────────────────────────────────
@@ -155,18 +155,31 @@ jobs:
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:latest
             ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
-
-
-
-
-
-
-
-
-
-
-
-
+  # ─────────────────────────────────────────
+  # Job 2: update Kubernetes Deployment (only main)
+  # ─────────────────────────────────────────
+  update-k8s-deployment:
+    runs-on: ubuntu-latest
+    needs: docker-push
+    steps:
+      - name: Clone Kubernetes repo
+        run: |
+          git clone https://github.com/maze0207-byte/portfolio-k8s.git
+          cd portfolio-k8s
+          git checkout main
+      - name: update image tag in deployment.yaml
+        run: |    
+          cd portfolio-k8s
+          sed -i "s#image: .\+#image: ${{ vars.DOCKERHUB_USERNAME}} /mazen-devops-portfolio:${{github.sha}}#g" Deployment.yaml 
+      - name: commit and push changes
+        run: |
+          cd portfolio-k8s
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Update image tag to ${{github.sha}}"
+          git push origin main
+          
 
 
 
