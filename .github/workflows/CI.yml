@@ -75,7 +75,7 @@ jobs:
       - name: Build Next.js app
         run: pnpm build
         env:
-          NEXT_PUBLIC_WS_URL: ws://localhost:3000 # dummy for build check
+          NEXT_PUBLIC_TERMINAL_WS_PORT: "30400"
 
   # ─────────────────────────────────────────
   # Job 3: Docker Build Test (no push)

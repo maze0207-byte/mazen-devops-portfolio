@@ -1,11 +1,22 @@
 "use client"
 
 import { AnimatePresence, motion } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { TerminalWindow } from "@/components/terminal/TerminalWindow"
 
 export default function TerminalContainer() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
+
+  useEffect(() => {
+    const openFromHash = () => {
+      if (window.location.hash === "#terminal" || window.location.hash === "#infrastructure") {
+        setIsOpen(true)
+      }
+    }
+    openFromHash()
+    window.addEventListener("hashchange", openFromHash)
+    return () => window.removeEventListener("hashchange", openFromHash)
+  }, [])
 
   return (
     <div className="rounded-[2rem] border border-white/10 bg-[#090b12] shadow-2xl shadow-cyan-500/5 overflow-hidden">
@@ -15,7 +26,7 @@ export default function TerminalContainer() {
             <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_0_8px_rgba(52,211,153,0.05)]" />
             Live Cluster
           </span>
-          <span className="font-mono text-xs text-zinc-500">visitor@mazen-cluster:~$</span>
+          <span className="font-mono text-xs text-zinc-500">mazen@testlab:~$</span>
         </div>
 
         <button

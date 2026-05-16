@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+cat <<'EOF'
+┌─────────────────────────────────────────────┐
+│  Mazen Gamal — DevOps / Platform Engineer   │
+│  Cairo, Egypt                               │
+│                                             │
+│  Stack: K8s · Docker · Terraform · CI/CD   │
+│  You are connected to my live cluster.      │
+│  Try: kubectl get pods --all-namespaces     │
+└─────────────────────────────────────────────┘
+EOF
+
+echo
+printf 'Type help to see available commands.\n'

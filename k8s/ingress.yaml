@@ -1,0 +1,32 @@
+# Apply after NodePort validation. NGINX Ingress WebSocket upgrade annotations.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portfolio-ingress
+  namespace: portfolio
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$remote_addr"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: your-domain.example
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portfolio-app
+                port:
+                  number: 3000
+          - path: /ws/terminal
+            pathType: Prefix
+            backend:
+              service:
+                name: terminal-server
+                port:
+                  number: 4000

@@ -1,0 +1,18 @@
+# Frontend (Next.js) — NodePort for Phase 4 validation before ingress/Cloudflare.
+apiVersion: v1
+kind: Service
+metadata:
+  name: portfolio-app
+  namespace: portfolio
+  labels:
+    app: portfolio-app
+spec:
+  type: NodePort
+  selector:
+    app: portfolio-app
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      nodePort: 30080
+      protocol: TCP

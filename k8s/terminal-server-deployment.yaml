@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terminal-server
+  namespace: portfolio
+  labels:
+    app: terminal-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: terminal-server
+  template:
+    metadata:
+      labels:
+        app: terminal-server
+    spec:
+      serviceAccountName: terminal-visitor
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: terminal-server
+          image: YOUR_DOCKERHUB_USERNAME/terminal-server:latest
+          imagePullPolicy: Always
+          ports:
+            - name: ws
+              containerPort: 4000
+              protocol: TCP
+          env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "4000"
+            - name: MAX_SESSIONS
+              value: "5"
+            - name: SESSION_TIMEOUT_MINUTES
+              value: "10"
+            - name: SHELL_PATH
+              value: "/scripts/restricted-shell.sh"
+            - name: KUBECONFIG
+              value: "/var/run/secrets/visitor-kubeconfig/kubeconfig"
+            # Comma-separated origins for browser WebSocket (set to your NodePort / ingress URL)
+            - name: ALLOWED_ORIGINS
+              value: "http://YOUR_NODE_IP:30080,https://your-domain.example"
+          volumeMounts:
+            - name: visitor-kubeconfig
+              mountPath: /var/run/secrets/visitor-kubeconfig
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: ws
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: ws
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: visitor-kubeconfig
+          secret:
+            secretName: visitor-kubeconfig
+            optional: true
+        - name: tmp
+          emptyDir: {}

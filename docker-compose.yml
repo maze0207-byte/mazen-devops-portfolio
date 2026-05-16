@@ -17,12 +17,14 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - ./k8s/visitor-kubeconfig.yaml:/kubeconfig:ro
     environment:
-      - KUBECONFIG_PATH=/kubeconfig
+      - HOST=0.0.0.0
+      - PORT=4000
+      - KUBECONFIG=/kubeconfig
       - MAX_SESSIONS=5
       - SESSION_TIMEOUT_MINUTES=10
+      - ALLOWED_ORIGINS=http://localhost:3000
     restart: unless-stopped
   # terminal-sandbox:
   #   image: ubuntu:latest

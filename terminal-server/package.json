@@ -1,6 +1,6 @@
 {
   "name": "terminal-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -8,11 +8,10 @@
     "dev": "ts-node server.ts"
   },
   "dependencies": {
-    "dockerode": "^4.0.12",
+    "node-pty": "^1.0.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@types/dockerode": "^3.3.5",
     "@types/node": "^22.0.0",
     "@types/ws": "^8.5.5",
     "ts-node": "^10.9.1",
