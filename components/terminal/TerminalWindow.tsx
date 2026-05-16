@@ -20,7 +20,6 @@ export function TerminalWindow({ className }: { className?: string }) {
 
   const wsUrl = useMemo(() => resolveTerminalWsUrl(), [])
   const httpBase = useMemo(() => terminalHttpBaseFromWsUrl(wsUrl), [wsUrl])
-  const emitResizeRef = useRef<() => void>(() => {})
 
   const onMessage = useCallback((data: string) => {
     if (!xtermRef.current) return
@@ -31,12 +30,7 @@ export function TerminalWindow({ className }: { className?: string }) {
     }
   }, [])
 
-  const { send, sendResize, status } = useTerminalSocket(wsUrl, onMessage, {
-    onConnected: () => {
-      console.log("[Terminal] Session ready — waiting for shell output")
-      emitResizeRef.current()
-    },
-  })
+  const { send, sendResize, status } = useTerminalSocket(wsUrl, onMessage)
 
   const emitResize = useCallback(() => {
     const fitAddon = fitAddonRef.current
@@ -45,8 +39,6 @@ export function TerminalWindow({ className }: { className?: string }) {
     const dims = fitAddon.proposeDimensions()
     if (dims) sendResize(dims.cols, dims.rows)
   }, [sendResize])
-
-  emitResizeRef.current = emitResize
 
   useEffect(() => {
     let cancelled = false
@@ -134,7 +126,10 @@ export function TerminalWindow({ className }: { className?: string }) {
   }, [send, wsUrl, emitResize])
 
   useEffect(() => {
-    if (status === "connected" && ready) emitResize()
+    if (status === "connected" && ready) {
+      console.log("[Terminal] Session ready — syncing terminal size")
+      emitResize()
+    }
   }, [status, ready, emitResize])
 
   return (

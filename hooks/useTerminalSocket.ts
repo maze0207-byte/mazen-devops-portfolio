@@ -31,9 +31,11 @@ export function useTerminalSocket(
   const optionsRef = useRef(options)
   const pendingResizeRef = useRef<{ cols: number; rows: number } | null>(null)
 
-  urlRef.current = url
-  onMessageRef.current = onMessage
-  optionsRef.current = options
+  useEffect(() => {
+    urlRef.current = url
+    onMessageRef.current = onMessage
+    optionsRef.current = options
+  }, [url, onMessage, options])
 
   const flushPendingResize = useCallback(() => {
     const pending = pendingResizeRef.current
