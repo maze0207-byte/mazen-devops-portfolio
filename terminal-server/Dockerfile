@@ -25,9 +25,9 @@ COPY --from=builder /app/package.json ./
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
-ENV PORT=30500
+ENV PORT=30001
 
-EXPOSE 30500
+EXPOSE 30001
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
   CMD curl -fsS http://127.0.0.1:30500/health || exit 1

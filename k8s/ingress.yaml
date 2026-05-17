@@ -29,4 +29,4 @@ spec:
               service:
                 name: terminal-backend
                 port:
-                  number: 30500
+                  number: 30001
