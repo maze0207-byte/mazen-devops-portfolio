@@ -27,6 +27,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: terminal-server
+                name: terminal-backend
                 port:
-                  number: 4000
+                  number: 30500

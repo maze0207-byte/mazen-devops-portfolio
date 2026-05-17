@@ -1,0 +1,40 @@
+# Safe demo target for portfolio terminal exec (sleeping shell container).
+apiVersion: v1
+kind: Pod
+metadata:
+  name: terminal-demo
+  namespace: portfolio
+  labels:
+    app: terminal-demo
+spec:
+  restartPolicy: Always
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: shell
+      image: alpine:3.20
+      command: ["/bin/sh", "-c", "apk add --no-cache bash && exec sleep infinity"]
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+        capabilities:
+          drop: ["ALL"]
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+  volumes:
+    - name: tmp
+      emptyDir: {}

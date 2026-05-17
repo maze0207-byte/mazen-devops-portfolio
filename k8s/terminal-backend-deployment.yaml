@@ -1,22 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: terminal-server
+  name: terminal-backend
   namespace: portfolio
   labels:
-    app: terminal-server
+    app: terminal-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: terminal-server
+      app: terminal-backend
   template:
     metadata:
       labels:
-        app: terminal-server
+        app: terminal-backend
     spec:
-      serviceAccountName: terminal-visitor
-      automountServiceAccountToken: false
+      serviceAccountName: terminal-backend
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -25,45 +24,38 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: terminal-server
-          image: YOUR_DOCKERHUB_USERNAME/terminal-server:latest
+        - name: terminal-backend
+          image: YOUR_DOCKERHUB_USERNAME/terminal-backend:latest
           imagePullPolicy: Always
           ports:
             - name: ws
-              containerPort: 4000
-              protocol: TCP
+              containerPort: 30500
           env:
             - name: HOST
               value: "0.0.0.0"
             - name: PORT
-              value: "4000"
+              value: "30500"
             - name: MAX_SESSIONS
-              value: "5"
-            - name: SESSION_TIMEOUT_MINUTES
               value: "10"
-            - name: SHELL_PATH
-              value: "/scripts/restricted-shell.sh"
-            - name: KUBECONFIG
-              value: "/var/run/secrets/visitor-kubeconfig/kubeconfig"
-            # Comma-separated origins for browser WebSocket (set to your NodePort / ingress URL)
+            - name: SESSION_TIMEOUT_MINUTES
+              value: "15"
+            - name: ALLOWED_NAMESPACES
+              value: "portfolio,default"
+            - name: DEFAULT_NAMESPACE
+              value: "portfolio"
+            # Comma-separated browser origins (NodePort frontend on 30000)
             - name: ALLOWED_ORIGINS
-              value: "http://YOUR_NODE_IP:30080,https://your-domain.example"
-          volumeMounts:
-            - name: visitor-kubeconfig
-              mountPath: /var/run/secrets/visitor-kubeconfig
-              readOnly: true
-            - name: tmp
-              mountPath: /tmp
+              value: "http://YOUR_NODE_IP:30000"
           resources:
             requests:
               cpu: 100m
               memory: 128Mi
             limits:
-              cpu: 500m
+              cpu: "1"
               memory: 512Mi
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+            readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1001
             capabilities:
@@ -80,10 +72,9 @@ spec:
               port: ws
             initialDelaySeconds: 5
             periodSeconds: 10
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
       volumes:
-        - name: visitor-kubeconfig
-          secret:
-            secretName: visitor-kubeconfig
-            optional: true
         - name: tmp
           emptyDir: {}

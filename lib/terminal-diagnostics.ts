@@ -13,9 +13,10 @@ export interface HealthResponse {
   status: string
   activeSessions: number
   maxSessions: number
-  shell: string
-  kubernetesDetected: boolean
-  ptyAvailable: boolean
+  inCluster?: boolean
+  kubernetesDetected?: boolean
+  allowedNamespaces?: string[]
+  port?: number
 }
 
 export async function fetchTerminalHealth(baseUrl: string): Promise<HealthResponse | null> {

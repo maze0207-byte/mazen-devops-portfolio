@@ -12,30 +12,17 @@ services:
       - "3000:3000"
     command: sh -c "npm install && npm run dev"
 
-  terminal-server:
+  terminal-backend:
     build: ./terminal-server
     ports:
-      - "4000:4000"
-    volumes:
-      - ./k8s/visitor-kubeconfig.yaml:/kubeconfig:ro
+      - "30500:30500"
     environment:
       - HOST=0.0.0.0
-      - PORT=4000
-      - KUBECONFIG=/kubeconfig
-      - MAX_SESSIONS=5
-      - SESSION_TIMEOUT_MINUTES=10
+      - PORT=30500
+      - ALLOW_LOCAL_FALLBACK=true
+      - ALLOWED_NAMESPACES=default,portfolio
+      - DEFAULT_NAMESPACE=default
+      - MAX_SESSIONS=10
+      - SESSION_TIMEOUT_MINUTES=15
       - ALLOWED_ORIGINS=http://localhost:3000
     restart: unless-stopped
-  # terminal-sandbox:
-  #   image: ubuntu:latest
-  #   container_name: terminal-sandbox
-  #   working_dir: /terminal-sandbox
-  #   command: sleep infinity
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   environment:
-  #     - KUBECONFIG_PATH=/kubeconfig
-  #   restart: unless-stopped
-
-
-  

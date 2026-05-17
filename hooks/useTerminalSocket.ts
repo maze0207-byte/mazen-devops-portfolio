@@ -2,14 +2,23 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
-export type TerminalStatus = "connecting" | "connected" | "disconnected" | "reconnecting"
+export type TerminalStatus = "connecting" | "connected" | "disconnected" | "reconnecting" | "attached"
 
 const MAX_RECONNECT_ATTEMPTS = 5
 const RECONNECT_BASE_DELAY_MS = 1000
 const HEARTBEAT_INTERVAL_MS = 30_000
 
+export interface TerminalConnectConfig {
+  pod: string
+  namespace?: string
+  container?: string
+  command?: string[]
+}
+
 export interface UseTerminalSocketOptions {
+  connect?: TerminalConnectConfig
   onConnected?: () => void
+  onAttached?: (info: { pod: string; namespace: string; container: string }) => void
   onDisconnected?: () => void
 }
 
@@ -30,6 +39,7 @@ export function useTerminalSocket(
   const onMessageRef = useRef(onMessage)
   const optionsRef = useRef(options)
   const pendingResizeRef = useRef<{ cols: number; rows: number } | null>(null)
+  const attachedRef = useRef(false)
 
   useEffect(() => {
     urlRef.current = url
@@ -37,21 +47,36 @@ export function useTerminalSocket(
     optionsRef.current = options
   }, [url, onMessage, options])
 
+  const sendConnect = useCallback((ws: WebSocket) => {
+    const cfg = optionsRef.current?.connect
+    if (!cfg?.pod) {
+      console.warn("[Terminal] No connect config — send connect message manually")
+      return
+    }
+    ws.send(
+      JSON.stringify({
+        type: "connect",
+        pod: cfg.pod,
+        namespace: cfg.namespace,
+        container: cfg.container,
+        command: cfg.command,
+      }),
+    )
+    console.log("[Terminal] Connect message sent", cfg)
+  }, [])
+
   const flushPendingResize = useCallback(() => {
     const pending = pendingResizeRef.current
     if (!pending || socketRef.current?.readyState !== WebSocket.OPEN) return
     socketRef.current.send(
       JSON.stringify({ type: "resize", cols: pending.cols, rows: pending.rows }),
     )
-    console.log("[Terminal] Resize sent (flushed)", pending)
     pendingResizeRef.current = null
   }, [])
 
   const send = useCallback((payload: string) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(JSON.stringify({ type: "input", data: payload }))
-    } else {
-      console.debug("[Terminal] Input dropped — WebSocket not open")
     }
   }, [])
 
@@ -60,12 +85,12 @@ export function useTerminalSocket(
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(JSON.stringify({ type: "resize", cols, rows }))
       pendingResizeRef.current = null
-      console.log("[Terminal] Resize sent", { cols, rows })
     }
   }, [])
 
   useEffect(() => {
     isMountedRef.current = true
+    attachedRef.current = false
 
     function clearTimers() {
       if (reconnectTimerRef.current) {
@@ -86,13 +111,44 @@ export function useTerminalSocket(
       }, HEARTBEAT_INTERVAL_MS)
     }
 
+    function handleParsedMessage(raw: string) {
+      try {
+        const msg = JSON.parse(raw)
+        if (msg && typeof msg.type === "string") {
+          switch (msg.type) {
+            case "output":
+            case "system":
+              if (msg.data) onMessageRef.current(msg.data)
+              return
+            case "error":
+              if (msg.data) onMessageRef.current(`\x1b[31m${msg.data}\x1b[0m\r\n`)
+              return
+            case "connected":
+              attachedRef.current = true
+              setStatus("attached")
+              if (msg.pod && msg.namespace && msg.container) {
+                optionsRef.current?.onAttached?.({
+                  pod: msg.pod,
+                  namespace: msg.namespace,
+                  container: msg.container,
+                })
+              }
+              flushPendingResize()
+              return
+            case "pong":
+              return
+          }
+        }
+      } catch {
+        // Not JSON
+      }
+      onMessageRef.current(raw)
+    }
+
     function connect() {
       if (!urlRef.current || !isMountedRef.current) return
 
       const wsUrl = urlRef.current
-      console.log(
-        `[Terminal] WebSocket connect — url=${wsUrl} attempt=${reconnectAttemptRef.current + 1}`,
-      )
       setStatus(reconnectAttemptRef.current > 0 ? "reconnecting" : "connecting")
 
       const ws = new WebSocket(wsUrl)
@@ -108,7 +164,7 @@ export function useTerminalSocket(
         setStatus("connected")
         reconnectAttemptRef.current = 0
         startHeartbeat(ws)
-        flushPendingResize()
+        sendConnect(ws)
         optionsRef.current?.onConnected?.()
       }
 
@@ -121,9 +177,7 @@ export function useTerminalSocket(
         } else if (event.data instanceof Blob) {
           const reader = new FileReader()
           reader.onload = () => {
-            if (typeof reader.result === "string") {
-              handleParsedMessage(reader.result)
-            }
+            if (typeof reader.result === "string") handleParsedMessage(reader.result)
           }
           reader.readAsText(event.data)
           return
@@ -132,55 +186,26 @@ export function useTerminalSocket(
       }
 
       ws.onclose = (ev) => {
-        console.log(`[Terminal] WebSocket disconnected (code=${ev.code}, reason=${ev.reason})`)
+        console.log(`[Terminal] WebSocket disconnected (code=${ev.code})`)
         clearTimers()
+        attachedRef.current = false
         if (!isMountedRef.current) return
         setStatus("disconnected")
         optionsRef.current?.onDisconnected?.()
         attemptReconnect()
       }
 
-      ws.onerror = () => {
-        console.error("[Terminal] WebSocket error")
-      }
-    }
-
-    function handleParsedMessage(raw: string) {
-      try {
-        const msg = JSON.parse(raw)
-        if (msg && typeof msg.type === "string") {
-          switch (msg.type) {
-            case "output":
-            case "system":
-              if (msg.data) onMessageRef.current(msg.data)
-              return
-            case "error":
-              if (msg.data) onMessageRef.current(`\x1b[31m${msg.data}\x1b[0m\r\n`)
-              return
-            case "pong":
-              return
-          }
-        }
-      } catch {
-        // Not JSON
-      }
-      onMessageRef.current(raw)
+      ws.onerror = () => console.error("[Terminal] WebSocket error")
     }
 
     function attemptReconnect() {
       if (!isMountedRef.current) return
       if (reconnectAttemptRef.current >= MAX_RECONNECT_ATTEMPTS) {
-        console.log("[Terminal] Max reconnect attempts reached")
         setStatus("disconnected")
         return
       }
-
       const delay = RECONNECT_BASE_DELAY_MS * Math.pow(2, reconnectAttemptRef.current)
-      console.log(
-        `[Terminal] Reconnecting in ${delay}ms (${reconnectAttemptRef.current + 1}/${MAX_RECONNECT_ATTEMPTS})`,
-      )
       setStatus("reconnecting")
-
       reconnectTimerRef.current = setTimeout(() => {
         reconnectAttemptRef.current += 1
         connect()
@@ -203,12 +228,13 @@ export function useTerminalSocket(
         socketRef.current = null
       }
     }
-  }, [url, flushPendingResize])
+  }, [url, sendConnect, flushPendingResize])
 
   return {
     status,
     send,
     sendResize,
-    isConnected: status === "connected",
+    isConnected: status === "connected" || status === "attached",
+    isAttached: status === "attached",
   }
 }

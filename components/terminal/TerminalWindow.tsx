@@ -8,7 +8,7 @@ import {
   terminalHttpBaseFromWsUrl,
   type TerminalDiagnostics,
 } from "@/lib/terminal-diagnostics"
-import { resolveTerminalWsUrl } from "@/lib/terminal-ws-url"
+import { resolveTerminalConnectConfig, resolveTerminalWsUrl } from "@/lib/terminal-ws-url"
 
 export function TerminalWindow({ className }: { className?: string }) {
   const terminalRef = useRef<HTMLDivElement>(null)
@@ -19,18 +19,26 @@ export function TerminalWindow({ className }: { className?: string }) {
   const [diagnostics, setDiagnostics] = useState<TerminalDiagnostics | null>(null)
 
   const wsUrl = useMemo(() => resolveTerminalWsUrl(), [])
+  const connectConfig = useMemo(() => resolveTerminalConnectConfig(), [])
   const httpBase = useMemo(() => terminalHttpBaseFromWsUrl(wsUrl), [wsUrl])
+  const [attachInfo, setAttachInfo] = useState<string | null>(null)
 
   const onMessage = useCallback((data: string) => {
     if (!xtermRef.current) return
     xtermRef.current.write(data)
-    if (!shellAttachedRef.current && data.includes("mazen@testlab")) {
+    if (!shellAttachedRef.current && (data.includes("$") || data.includes("#"))) {
       shellAttachedRef.current = true
-      console.log("[Terminal] Shell prompt detected — Terminal Attached")
     }
   }, [])
 
-  const { send, sendResize, status } = useTerminalSocket(wsUrl, onMessage)
+  const { send, sendResize, status } = useTerminalSocket(wsUrl, onMessage, {
+    connect: connectConfig,
+    onAttached: (info) => {
+      shellAttachedRef.current = true
+      setAttachInfo(`${info.namespace}/${info.pod}:${info.container}`)
+      console.log("[Terminal] Kubernetes exec attached", info)
+    },
+  })
 
   const emitResize = useCallback(() => {
     const fitAddon = fitAddonRef.current
@@ -49,7 +57,9 @@ export function TerminalWindow({ className }: { className?: string }) {
       setDiagnostics({
         ...diag,
         websocket:
-          status === "connected" ? "✔ WebSocket connected" : "✖ WebSocket not connected",
+          status === "connected" || status === "attached"
+            ? "✔ WebSocket connected"
+            : "✖ WebSocket not connected",
         podReady: health?.status === "ok" ? "✔ Pod ready" : "✖ Backend unreachable",
       })
     })()
@@ -126,8 +136,7 @@ export function TerminalWindow({ className }: { className?: string }) {
   }, [send, wsUrl, emitResize])
 
   useEffect(() => {
-    if (status === "connected" && ready) {
-      console.log("[Terminal] Session ready — syncing terminal size")
+    if ((status === "connected" || status === "attached") && ready) {
       emitResize()
     }
   }, [status, ready, emitResize])
@@ -144,7 +153,7 @@ export function TerminalWindow({ className }: { className?: string }) {
           <span className="inline-flex items-center gap-2">
             <span
               className={`inline-flex h-2 w-2 rounded-full ${
-                status === "connected"
+                status === "connected" || status === "attached"
                   ? "bg-emerald-400"
                   : status === "connecting" || status === "reconnecting"
                     ? "bg-amber-400 animate-pulse"
@@ -157,7 +166,7 @@ export function TerminalWindow({ className }: { className?: string }) {
             {wsUrl.replace(/^wss?:\/\//, "")}
           </span>
           <span className="rounded-full border border-white/10 px-2 py-1 bg-white/5 text-emerald-300">
-            Live Cluster
+            {attachInfo ?? "K8s Exec"}
           </span>
         </div>
       </div>
