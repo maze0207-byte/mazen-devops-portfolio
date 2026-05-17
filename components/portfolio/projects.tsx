@@ -10,7 +10,7 @@ const projects = [
     icon: "🏗️",
     title: "Multi-Region EKS Infrastructure",
     description: "Production-grade AWS EKS cluster with Terraform modules. Includes VPC, private subnets, IAM roles, managed node groups with auto-scaling, and multi-AZ failover strategy.",
-    tags: ["Terraform", "AWS EKS", "VPC", "IAM", "Helm"],
+    tags: ["Terraform", "AWS EKS", "VPC", "IAM", "Auto-scaling"],
     github: "https://github.com/maze0207/aws-eks-terraform",
   },
   {
@@ -24,7 +24,7 @@ const projects = [
     icon: "📊",
     title: "Full Observability Stack",
     description: "Prometheus + Grafana + Alertmanager on Kubernetes via Helm. Custom dashboards for system metrics, SLO tracking, and PagerDuty/Slack alert routing.",
-    tags: ["Prometheus", "Grafana", "Helm", "Alertmanager", "Slack"],
+    tags: ["Prometheus", "Grafana","loki", "Alertmanager", "Slack"],
     github: "https://github.com/maze0207/observability-stack",
   },
   {
