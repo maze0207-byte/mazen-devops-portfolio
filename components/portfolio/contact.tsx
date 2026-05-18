@@ -22,7 +22,7 @@ const contactLinks = [
   },
   {
     icon: Linkedin,
-    label: "LinkedIn",
+    label: "LinkedIn-",
     value: "linkedin.com/in/mazen-ahmed-b591b5376",
     href: "https://www.linkedin.com/in/mazen-ahmed-b591b5376",
     color: "from-blue-600 to-blue-700",
