@@ -80,10 +80,10 @@ export function TerminalWindow({ className }: { className?: string }) {
       if (!terminalRef.current || !isMounted) return
 
       terminalElement = terminalRef.current
-      const [{ Terminal }, { FitAddon }, { WebLinksAddon }] = await Promise.all([
+      const [{ Terminal }, { FitAddon }, webLinksModule] = await Promise.all([
         import("xterm"),
-        import("xterm-addon-fit"),
-        import("xterm-addon-web-links"),
+        import("@xterm/addon-fit"),
+        import("@xterm/addon-web-links"),
       ])
 
       const term = new Terminal({
@@ -105,7 +105,15 @@ export function TerminalWindow({ className }: { className?: string }) {
 
       const fitAddon = new FitAddon()
       term.loadAddon(fitAddon)
-      term.loadAddon(new WebLinksAddon())
+
+      if (webLinksModule?.WebLinksAddon) {
+        try {
+          term.loadAddon(new webLinksModule.WebLinksAddon())
+        } catch (error) {
+          console.warn("Terminal web links addon failed to initialize:", error)
+        }
+      }
+
       term.open(terminalElement)
       term.writeln("\x1b[32mMazen DevOps — live cluster terminal\x1b[0m")
       term.writeln(`\x1b[90mEndpoint: ${wsUrl}\x1b[0m`)
