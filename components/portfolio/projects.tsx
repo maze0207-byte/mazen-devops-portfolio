@@ -15,7 +15,7 @@ const projects = [
   },
   {
     icon: "🚀",
-    title: "Zero-Downtime CI/CD Pipeline",
+    title: "Zero-Downtime GitOps Pipeline",
     description: "End-to-end GitHub Actions pipeline: build Docker images → push to ECR → test → deploy to EKS with rolling updates and automatic rollback on failure. GitOps-driven with ArgoCD.",
     tags: ["GitHub Actions", "Docker", "ECR", "ArgoCD", "EKS"],
     github: "https://github.com/maze0207/cicd-pipeline-k8s",
