@@ -66,10 +66,9 @@ export function TerminalWindow({ className }: { className?: string }) {
       if (!terminalRef.current || !isMounted) return
 
       terminalElement = terminalRef.current
-      const [{ Terminal }, { FitAddon }, { WebLinksAddon }] = await Promise.all([
+      const [{ Terminal }, { FitAddon }] = await Promise.all([
         import("xterm"),
         import("xterm-addon-fit"),
-        import("xterm-addon-web-links"),
       ])
 
       const term = new Terminal({
@@ -90,9 +89,7 @@ export function TerminalWindow({ className }: { className?: string }) {
       })
 
       const fitAddon = new FitAddon()
-      const webLinksAddon = new WebLinksAddon()
       term.loadAddon(fitAddon)
-      term.loadAddon(webLinksAddon)
       term.open(terminalElement)
       term.writeln("\x1b[32mWelcome to the Mazen DevOps live cluster terminal.\x1b[0m")
       term.writeln("Type \x1b[36mhelp\x1b[0m for available commands or use the shell prompt directly.")
@@ -165,8 +162,22 @@ export function TerminalWindow({ className }: { className?: string }) {
       </div>
       <div className="h-[420px] bg-[#0d1117] text-sm" ref={terminalRef} />
       {!ready && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#0d1117]/90 text-sm text-zinc-400">
-          Initializing terminal...
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-[#0d1117]/90 text-sm text-zinc-400 gap-3">
+          <div>
+            {status === "error" ? (
+              <>
+                <div className="text-red-400 font-semibold mb-2">Connection Failed</div>
+                <div className="text-xs text-zinc-500 max-w-xs">
+                  Backend server is not accessible at {DEFAULT_WS_URL}
+                </div>
+              </>
+            ) : (
+              <>
+                <div>Initializing terminal...</div>
+                <div className="text-xs text-zinc-500">Connecting to {DEFAULT_WS_URL}</div>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
