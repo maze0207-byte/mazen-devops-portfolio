@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 interface HealthStatus {
   status: string
@@ -23,9 +23,13 @@ export function DiagnosticsPanel() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const backendUrl = typeof window !== "undefined"
-    ? `${window.location.protocol}//${window.location.host}`
-    : "http://localhost:4000"
+  const backendUrl = useMemo(
+    () =>
+      typeof window !== "undefined"
+        ? `${window.location.protocol}//${window.location.host}`
+        : "http://localhost:4000",
+    [],
+  )
 
   useEffect(() => {
     const checkConnectivity = async () => {

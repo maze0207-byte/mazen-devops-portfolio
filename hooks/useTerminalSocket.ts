@@ -216,17 +216,28 @@ export function useTerminalSocket(
     shouldReconnectRef.current = true
     reconnectAttemptsRef.current = 0
 
-    if (url) {
-      connect(url)
-    } else {
-      cleanupSocket(true)
+    if (!url) {
+      const cleanupId = window.setTimeout(() => {
+        cleanupSocket(true)
+      }, 0)
+
+      return () => {
+        shouldReconnectRef.current = false
+        window.clearTimeout(cleanupId)
+        cleanupSocket()
+      }
     }
+
+    const connectId = window.setTimeout(() => {
+      connectRef.current(url)
+    }, 0)
 
     return () => {
       shouldReconnectRef.current = false
+      window.clearTimeout(connectId)
       cleanupSocket()
     }
-  }, [cleanupSocket, connect, url])
+  }, [cleanupSocket, url])
 
   return {
     status,
