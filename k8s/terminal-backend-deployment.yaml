@@ -34,7 +34,7 @@ spec:
             - name: HOST
               value: "0.0.0.0"
             - name: PORT
-              value: "30500"
+              value: "30001"
             - name: MAX_SESSIONS
               value: "10"
             - name: SESSION_TIMEOUT_MINUTES
@@ -43,9 +43,9 @@ spec:
               value: "portfolio,default"
             - name: DEFAULT_NAMESPACE
               value: "portfolio"
-            # Comma-separated browser origins (NodePort frontend on 30000)
+            # Comma-separated browser origins (NodePort frontend on 30001)
             - name: ALLOWED_ORIGINS
-              value: "http://YOUR_NODE_IP:30000"
+              value: "http://YOUR_NODE_IP:30001"
           resources:
             requests:
               cpu: 100m
