@@ -35,7 +35,7 @@ export function K8sTerminalExample() {
 
     ;(async () => {
       const { Terminal } = await import("xterm")
-      const { FitAddon } = await import("xterm-addon-fit")
+      const { FitAddon } = await import("@xterm/addon-fit")
       if (!containerRef.current || disposed) return
 
       const term = new Terminal({ cursorBlink: true, fontSize: 13 })
