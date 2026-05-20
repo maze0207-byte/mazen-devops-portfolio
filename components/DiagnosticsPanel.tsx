@@ -22,16 +22,12 @@ export function DiagnosticsPanel() {
   const [diagnostics, setDiagnostics] = useState<DiagnosticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [backendUrl, setBackendUrl] = useState<string>("")
+
+  const backendUrl = typeof window !== "undefined"
+    ? `${window.location.protocol}//${window.location.host}`
+    : "http://localhost:4000"
 
   useEffect(() => {
-    // Determine backend URL
-    const url = typeof window !== "undefined"
-      ? `${window.location.protocol}//${window.location.host}`
-      : "http://localhost:4000"
-    
-    setBackendUrl(url)
-
     const checkConnectivity = async () => {
       try {
         setLoading(true)
