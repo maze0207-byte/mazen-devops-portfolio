@@ -3,7 +3,42 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useTerminalSocket } from "@/hooks/useTerminalSocket"
 
-const DEFAULT_WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000"
+// Determine WebSocket URL based on environment
+function getWebSocketURL(): string {
+  // Check explicit env var first
+  if (process.env.NEXT_PUBLIC_WS_URL) {
+    return process.env.NEXT_PUBLIC_WS_URL
+  }
+
+  // In browser environment, detect from current location
+  if (typeof window !== "undefined") {
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:"
+    const host = window.location.host
+
+    // Check if running on a NodePort (e.g., :30500)
+    if (host.includes(":30500")) {
+      return `${protocol}//${host}`
+    }
+
+    // Check if running on Ingress with subdomain
+    if (host.includes("terminal.")) {
+      return `${protocol}//${host}`
+    }
+
+    // Check for port-forwarded localhost
+    if (host.includes("localhost") || host.includes("127.0.0.1")) {
+      return `${protocol}//localhost:4000`
+    }
+
+    // Default to current host
+    return `${protocol}//${host}`
+  }
+
+  // Server-side default
+  return "ws://localhost:4000"
+}
+
+const DEFAULT_WS_URL = getWebSocketURL()
 
 export function TerminalWindow({ className }: { className?: string }) {
   const terminalRef = useRef<HTMLDivElement>(null)
