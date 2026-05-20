@@ -2,6 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTerminalSocket } from "@/hooks/useTerminalSocket"
+import {
+  fetchTerminalDiagnostics,
+  fetchTerminalHealth,
+  terminalHttpBaseFromWsUrl,
+  TerminalDiagnostics,
+} from "@/lib/terminal-diagnostics"
+import { resolveTerminalConnectConfig, resolveTerminalWsUrl } from "@/lib/terminal-ws-url"
 
 const DEFAULT_WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000"
 
@@ -173,9 +180,11 @@ export function TerminalWindow({ className }: { className?: string }) {
       )}
       {diagnostics && status !== "connecting" && (
         <div className="border-t border-white/5 bg-[#04060a]/90 px-4 py-2 font-mono text-[10px] text-zinc-500 space-y-0.5">
-          {Object.values(diagnostics).map((line) => (
-            <div key={line}>{line}</div>
-          ))}
+          {Object.values(diagnostics)
+            .filter((value): value is string => typeof value === "string")
+            .map((line) => (
+              <div key={line}>{line}</div>
+            ))}
         </div>
       )}
     </div>
