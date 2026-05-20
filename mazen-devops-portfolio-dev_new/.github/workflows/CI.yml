@@ -1,0 +1,176 @@
+name: CI
+
+on:
+  push:
+    branches: ["fix-next-command", "dev_new"]
+  pull_request:
+    branches: [dev_new]
+
+# Global securty permissions for the workflow
+permissions:
+   contents: read # For checkout action
+   
+
+jobs:
+  # ─────────────────────────────────────────
+  # Job 1: Lint + Type Check
+  # ─────────────────────────────────────────
+  lint-and-type-check :
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run TypeScript check
+        run: pnpm tsc --noEmit
+
+      - name: Run ESLint
+        run: pnpm lint
+    
+  # dependency vulnerability check (optional but recommended)
+      - name: Check for vulnerable dependencies
+        run: pnpm audit --audit-level=high
+  # ─────────────────────────────────────────
+  # Job 2: Build (Next.js)
+  # ─────────────────────────────────────────
+  build:
+    name: Next.js Build
+    runs-on: ubuntu-latest
+    needs: lint-and-type-check
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js app
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_WS_URL: ws://localhost:3000 # dummy for build check
+
+  # ─────────────────────────────────────────
+  # Job 3: Docker Build Test (no push)
+  # ─────────────────────────────────────────
+  docker-build-test:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+    # secret scan for Docker Hub credentials (optional but recommended)
+      - name: Check for Docker Hub credentials in code
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: "--path . --report-format json --report-path gitleaks_report.json --redact"
+
+      - name: Build Docker image 
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: false # do not push to registry
+          load: true # load image into runner for testing
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+    # vulnerability scan for built Docker image (optional but recommended)
+      - name: Scan image 
+        uses: aquasecurity/trivy-action@v0.24.0
+        with:
+          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
+          format: 'table'
+          exit-code: '0' # fail if vulnerabilities are found
+          severity: 'HIGH,CRITICAL' # only report high and critical vulnerabilities
+  
+  # ─────────────────────────────────────────
+  # Job 3: Docker Push  (only main)))
+  # ─────────────────────────────────────────
+
+  docker-push:
+    runs-on: ubuntu-latest
+    needs: docker-build-test
+    if: github.ref == 'refs/heads/fix-next-command' # Only run on main branch
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Fetch full history for accurate git info in Docker buildgit 
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      -
+        name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/mazen-devops-portfolio:${{github.sha}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

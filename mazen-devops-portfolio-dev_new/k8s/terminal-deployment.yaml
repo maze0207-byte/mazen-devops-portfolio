@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terminal-server
+  namespace: default
+  labels:
+    app: terminal-server
+    component: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: terminal-server
+  template:
+    metadata:
+      labels:
+        app: terminal-server
+      annotations:
+        deployment.kubernetes.io/revision: "1"
+    spec:
+      serviceAccountName: terminal-visitor
+      
+      # Init container to verify kubeconfig exists
+      initContainers:
+      - name: verify-kubeconfig
+        image: busybox:1.28
+        command: ['sh', '-c', 'test -f /kubeconfig/kubeconfig.yaml || (echo "Kubeconfig not found at /kubeconfig/kubeconfig.yaml" && exit 1)']
+        volumeMounts:
+        - name: kubeconfig-volume
+          mountPath: /kubeconfig
+          readOnly: true
+      
+      containers:
+      - name: terminal-server
+        image: mazen-terminal-server:latest
+        imagePullPolicy: IfNotPresent
+        
+        ports:
+        - name: http
+          containerPort: 4000
+          protocol: TCP
+        
+        env:
+        - name: PORT
+          value: "4000"
+        - name: MAX_SESSIONS
+          value: "10"
+        - name: SESSION_TIMEOUT_MINUTES
+          value: "15"
+        - name: KUBECONFIG_PATH
+          value: "/kubeconfig/kubeconfig.yaml"
+        - name: NODE_ENV
+          value: "production"
+        
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        
+        # Health check for pod readiness
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 4000
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+        
+        # Security context
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+          capabilities:
+            drop:
+            - ALL
+        
+        volumeMounts:
+        - name: kubeconfig-volume
+          mountPath: /kubeconfig
+          readOnly: true
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+      
+      volumes:
+      - name: kubeconfig-volume
+        secret:
+          secretName: terminal-visitor-kubeconfig
+          defaultMode: 0600
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
+      
+      # Pod disruption budget
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - terminal-server
+              topologyKey: kubernetes.io/hostname
