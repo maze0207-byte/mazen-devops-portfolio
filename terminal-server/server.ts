@@ -3,6 +3,7 @@ import path from "node:path"
 import { once } from "node:events"
 import Docker from "dockerode"
 import { WebSocketServer, WebSocket } from "ws"
+import http from "node:http"
 
 const PORT = 4000
 const IMAGE_NAME = "mazen-terminal-sandbox:latest"
@@ -58,6 +59,49 @@ async function ensureSandboxImage() {
 }
 
 const wss = new WebSocketServer({ port: PORT })
+
+// Health check endpoint
+const server = http.createServer((req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+  
+  if (req.method === "OPTIONS") {
+    res.writeHead(200)
+    res.end()
+    return
+  }
+
+  if (req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.end(JSON.stringify({ status: "ok", timestamp: new Date().toISOString() }))
+    return
+  }
+
+  if (req.url === "/diagnostics") {
+    const diagnostics = {
+      status: "ok",
+      timestamp: new Date().toISOString(),
+      port: PORT,
+      activeSessions: activeSessions.size,
+      maxSessions: MAX_SESSIONS,
+      sessionTimeout: SESSION_TIMEOUT_MINUTES,
+      uptime: process.uptime(),
+    }
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.end(JSON.stringify(diagnostics))
+    return
+  }
+
+  res.writeHead(404, { "Content-Type": "application/json" })
+  res.end(JSON.stringify({ error: "Not found" }))
+})
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`HTTP server listening on http://0.0.0.0:${PORT}`)
+})
+
+const wss = new WebSocketServer({ server })
 
 function cleanupSession(ws: WebSocket) {
   const session = activeSessions.get(ws)
@@ -219,7 +263,7 @@ wss.on("connection", async (ws, req) => {
 })
 
 wss.on("listening", () => {
-  console.log(`Terminal WebSocket server listening on ws://localhost:${PORT}`)
+  console.log(`Terminal WebSocket server listening on ws://0.0.0.0:${PORT}`)
 })
 
 wss.on("error", (error) => {
@@ -229,6 +273,7 @@ wss.on("error", (error) => {
 const shutdown = async () => {
   console.log("Shutting down terminal server...")
   wss.close()
+  server.close()
   for (const ws of Array.from(activeSessions.keys())) {
     cleanupSession(ws)
   }
