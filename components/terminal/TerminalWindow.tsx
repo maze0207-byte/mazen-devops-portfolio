@@ -2,13 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTerminalSocket } from "@/hooks/useTerminalSocket"
-import {
-  fetchTerminalDiagnostics,
-  fetchTerminalHealth,
-  terminalHttpBaseFromWsUrl,
-  type TerminalDiagnostics,
-} from "@/lib/terminal-diagnostics"
-import { resolveTerminalConnectConfig, resolveTerminalWsUrl } from "@/lib/terminal-ws-url"
+
+const DEFAULT_WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000"
 
 export function TerminalWindow({ className }: { className?: string }) {
   const terminalRef = useRef<HTMLDivElement>(null)
