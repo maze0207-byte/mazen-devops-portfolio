@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@kubernetes/client-node": "^1.0.0",
+    "dockerode": "^4.0.0",
     "ws": "^8.20.1"
   },
   "devDependencies": {
+    "@types/dockerode": "^4.0.1",
     "@types/node": "^22.0.0",
     "@types/ws": "^8.5.5",
     "ts-node": "^10.9.2",

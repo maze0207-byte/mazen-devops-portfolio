@@ -34,14 +34,14 @@ export function DiagnosticsPanel() {
         setError(null)
 
         // Check health
-        const healthRes = await fetch(`${url}/health`)
+        const healthRes = await fetch(`${backendUrl}/health`)
         if (healthRes.ok) {
           const healthData = await healthRes.json()
           setHealth(healthData)
         }
 
         // Check diagnostics
-        const diagnosticsRes = await fetch(`${url}/diagnostics`)
+        const diagnosticsRes = await fetch(`${backendUrl}/diagnostics`)
         if (diagnosticsRes.ok) {
           const diagnosticsData = await diagnosticsRes.json()
           setDiagnostics(diagnosticsData)
