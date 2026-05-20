@@ -30,6 +30,9 @@ type ServerMessage =
   | { type: "pong"; data?: string }
   | { type: string; [key: string]: unknown }
 
+const MAX_RECONNECT_DELAY_MS = 30000
+const INITIAL_RECONNECT_DELAY_MS = 1000
+
 export function useTerminalSocket(
   url: string,
   onMessage: (message: string) => void,
@@ -39,8 +42,13 @@ export function useTerminalSocket(
     url ? "connecting" : "disconnected",
   )
   const socketRef = useRef<WebSocket | null>(null)
+  const reconnectTimerRef = useRef<number | null>(null)
+  const reconnectAttemptsRef = useRef(0)
+  const shouldReconnectRef = useRef(true)
   const connectConfig = options?.connect
   const onAttached = options?.onAttached
+  const connectRef = useRef<(url: string) => void>(() => {})
+  const scheduleReconnectRef = useRef<(url: string) => void>(() => {})
 
   const send = useCallback((payload: string) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
@@ -98,54 +106,127 @@ export function useTerminalSocket(
     [onAttached, onMessage],
   )
 
-  useEffect(() => {
-    if (!url) {
-      return
+  const cleanupSocket = useCallback((disconnect = false) => {
+    if (reconnectTimerRef.current !== null) {
+      window.clearTimeout(reconnectTimerRef.current)
+      reconnectTimerRef.current = null
     }
 
-    const ws = new WebSocket(url)
-    ws.binaryType = "arraybuffer"
-    socketRef.current = ws
-
-    ws.onopen = () => {
-      setStatus("connected")
-      if (connectConfig?.pod) {
-        ws.send(JSON.stringify({ type: "connect", ...connectConfig }))
-      }
-    }
-
-    ws.onmessage = (event) => {
-      let raw = ""
-      if (typeof event.data === "string") {
-        raw = event.data
-      } else if (event.data instanceof ArrayBuffer) {
-        raw = new TextDecoder().decode(event.data)
-      } else if (event.data instanceof Blob) {
-        const reader = new FileReader()
-        reader.onload = () => {
-          if (typeof reader.result === "string") handleParsedMessage(reader.result)
-        }
-        reader.readAsText(event.data)
-        return
-      }
-      handleParsedMessage(raw)
-    }
-
-    ws.onclose = () => {
-      setStatus("disconnected")
-    }
-
-    ws.onerror = () => {
-      setStatus("disconnected")
-    }
-
-    return () => {
-      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-        socketRef.current.close()
+    if (socketRef.current) {
+      socketRef.current.onopen = null
+      socketRef.current.onmessage = null
+      socketRef.current.onclose = null
+      socketRef.current.onerror = null
+      if (socketRef.current.readyState === WebSocket.OPEN) {
+        socketRef.current.close(1000, "Client disconnect")
       }
       socketRef.current = null
     }
-  }, [connectConfig, handleParsedMessage, url])
+
+    if (disconnect) {
+      setStatus("disconnected")
+    }
+  }, [])
+
+  const connect = useCallback(
+    (currentUrl: string) => {
+      cleanupSocket()
+      if (!currentUrl) {
+        cleanupSocket(true)
+        return
+      }
+
+      const ws = new WebSocket(currentUrl)
+      ws.binaryType = "arraybuffer"
+      socketRef.current = ws
+      setStatus("connecting")
+
+      ws.onopen = () => {
+        reconnectAttemptsRef.current = 0
+        setStatus("connected")
+        if (connectConfig?.pod) {
+          ws.send(JSON.stringify({ type: "connect", ...connectConfig }))
+        }
+      }
+
+      ws.onmessage = (event) => {
+        if (typeof event.data === "string") {
+          handleParsedMessage(event.data)
+          return
+        }
+
+        if (event.data instanceof ArrayBuffer) {
+          handleParsedMessage(new TextDecoder().decode(event.data))
+          return
+        }
+
+        if (event.data instanceof Blob) {
+          const reader = new FileReader()
+          reader.onload = () => {
+            if (typeof reader.result === "string") {
+              handleParsedMessage(reader.result)
+            }
+          }
+          reader.readAsText(event.data)
+        }
+      }
+
+      ws.onclose = (event) => {
+        if (!shouldReconnectRef.current) {
+          cleanupSocket(true)
+          return
+        }
+
+        if (event.code === 1000) {
+          cleanupSocket(true)
+          return
+        }
+
+        scheduleReconnectRef.current(currentUrl)
+      }
+
+      ws.onerror = () => {
+        setStatus("disconnected")
+      }
+    },
+    [cleanupSocket, connectConfig, handleParsedMessage],
+  )
+
+  const scheduleReconnect = useCallback((urlToConnect: string) => {
+    if (!shouldReconnectRef.current) return
+
+    const attempt = reconnectAttemptsRef.current + 1
+    reconnectAttemptsRef.current = attempt
+    const delay = Math.min(INITIAL_RECONNECT_DELAY_MS * 2 ** (attempt - 1), MAX_RECONNECT_DELAY_MS)
+
+    setStatus("reconnecting")
+    reconnectTimerRef.current = window.setTimeout(() => {
+      if (shouldReconnectRef.current) {
+        connectRef.current(urlToConnect)
+      }
+    }, delay)
+  }, [])
+
+  useEffect(() => {
+    connectRef.current = connect
+    scheduleReconnectRef.current = scheduleReconnect
+  }, [connect, scheduleReconnect])
+
+  useEffect(() => {
+    shouldReconnectRef.current = true
+    reconnectAttemptsRef.current = 0
+
+    if (url) {
+      connect(url)
+    } else {
+      cleanupSocket(true)
+    }
+
+    return () => {
+      shouldReconnectRef.current = false
+      cleanupSocket()
+    }
+  }, [cleanupSocket, connect, url])
 
   return {
     status,

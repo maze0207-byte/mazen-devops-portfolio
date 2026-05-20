@@ -15,7 +15,7 @@ import { resolveTerminalConnectConfig, resolveTerminalWsUrl } from "@/lib/termin
 
 export function K8sTerminalExample() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const termRef = useRef<import("xterm").Terminal | null>(null)
+  const termRef = useRef<import("@xterm/xterm").Terminal | null>(null)
 
   const wsUrl = resolveTerminalWsUrl()
   const connect = resolveTerminalConnectConfig()
@@ -34,7 +34,7 @@ export function K8sTerminalExample() {
     let cleanupResize: (() => void) | undefined
 
     ;(async () => {
-      const { Terminal } = await import("xterm")
+      const { Terminal } = await import("@xterm/xterm")
       const { FitAddon } = await import("@xterm/addon-fit")
       if (!containerRef.current || disposed) return
 

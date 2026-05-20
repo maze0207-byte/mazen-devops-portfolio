@@ -9,25 +9,29 @@ import {
   TerminalDiagnostics,
 } from "@/lib/terminal-diagnostics"
 import { resolveTerminalConnectConfig, resolveTerminalWsUrl } from "@/lib/terminal-ws-url"
+import type { Terminal as XTermTerminal } from "@xterm/xterm"
+import type { FitAddon } from "@xterm/addon-fit"
 
-const DEFAULT_WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000"
+const INITIAL_ROWS = 30
+const INITIAL_COLS = 100
 
 export function TerminalWindow({ className }: { className?: string }) {
-  const terminalRef = useRef<HTMLDivElement>(null)
-  const xtermRef = useRef<any>(null)
-  const fitAddonRef = useRef<any>(null)
+  const terminalRef = useRef<HTMLDivElement | null>(null)
+  const xtermRef = useRef<XTermTerminal | null>(null)
+  const fitAddonRef = useRef<FitAddon | null>(null)
+  const mountedRef = useRef(false)
   const shellAttachedRef = useRef(false)
   const [ready, setReady] = useState(false)
   const [diagnostics, setDiagnostics] = useState<TerminalDiagnostics | null>(null)
+  const [backendError, setBackendError] = useState<string | null>(null)
+  const [attachInfo, setAttachInfo] = useState<string | null>(null)
 
   const wsUrl = useMemo(() => resolveTerminalWsUrl(), [])
   const connectConfig = useMemo(() => resolveTerminalConnectConfig(), [])
   const httpBase = useMemo(() => terminalHttpBaseFromWsUrl(wsUrl), [wsUrl])
-  const [attachInfo, setAttachInfo] = useState<string | null>(null)
 
   const onMessage = useCallback((data: string) => {
-    if (!xtermRef.current) return
-    xtermRef.current.write(data)
+    xtermRef.current?.write(data)
     if (!shellAttachedRef.current && (data.includes("$") || data.includes("#"))) {
       shellAttachedRef.current = true
     }
@@ -38,58 +42,88 @@ export function TerminalWindow({ className }: { className?: string }) {
     onAttached: (info) => {
       shellAttachedRef.current = true
       setAttachInfo(`${info.namespace}/${info.pod}:${info.container}`)
-      console.log("[Terminal] Kubernetes exec attached", info)
     },
   })
 
-  const emitResize = useCallback(() => {
+  const resizeTerminal = useCallback(() => {
     const fitAddon = fitAddonRef.current
     if (!fitAddon) return
+
     fitAddon.fit()
-    const dims = fitAddon.proposeDimensions()
-    if (dims) sendResize(dims.cols, dims.rows)
+    const dims = fitAddon.proposeDimensions?.()
+    if (dims) {
+      sendResize(dims.cols, dims.rows)
+    }
   }, [sendResize])
 
   useEffect(() => {
-    let cancelled = false
-    ;(async () => {
-      const health = await fetchTerminalHealth(httpBase)
-      const diag = await fetchTerminalDiagnostics(httpBase)
-      if (cancelled || !diag) return
-      setDiagnostics({
-        ...diag,
-        websocket:
-          status === "connected" || status === "attached"
-            ? "✔ WebSocket connected"
-            : "✖ WebSocket not connected",
-        podReady: health?.status === "ok" ? "✔ Pod ready" : "✖ Backend unreachable",
-      })
-    })()
+    let active = true
+
+    const refreshDiagnostics = async () => {
+      try {
+        const [health, diag] = await Promise.all([
+          fetchTerminalHealth(httpBase),
+          fetchTerminalDiagnostics(httpBase),
+        ])
+
+        if (!active) return
+
+        if (!diag) {
+          setBackendError("Terminal backend unreachable.")
+          setDiagnostics(null)
+          return
+        }
+
+        setBackendError(null)
+        setDiagnostics({
+          ...diag,
+          websocket:
+            status === "connected" || status === "attached"
+              ? "✔ WebSocket connected"
+              : "✖ WebSocket not connected",
+          podReady:
+            health?.status === "ok"
+              ? "✔ Pod ready"
+              : "✖ Backend unreachable",
+        })
+      } catch {
+        if (!active) return
+        setBackendError("Failed to fetch terminal diagnostics.")
+        setDiagnostics(null)
+      }
+    }
+
+    refreshDiagnostics()
+
     return () => {
-      cancelled = true
+      active = false
     }
   }, [httpBase, status])
 
   useEffect(() => {
-    let fitObserver: ResizeObserver | null = null
-    let resizeHandler: () => void
-    let isMounted = true
+    mountedRef.current = true
+    let cancel = false
+    let resizeObserver: ResizeObserver | null = null
     let terminalElement: HTMLDivElement | null = null
 
     const initializeTerminal = async () => {
-      if (!terminalRef.current || !isMounted) return
-
       terminalElement = terminalRef.current
+      if (!terminalElement || cancel) return
+
       const [{ Terminal }, { FitAddon }, webLinksModule] = await Promise.all([
-        import("xterm"),
+        import("@xterm/xterm"),
         import("@xterm/addon-fit"),
         import("@xterm/addon-web-links"),
       ])
+
+      if (cancel || !terminalElement) return
 
       const term = new Terminal({
         cursorBlink: true,
         fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
         fontSize: 13,
+        cols: INITIAL_COLS,
+        rows: INITIAL_ROWS,
         theme: {
           background: "#0d1117",
           foreground: "#c9d1d9",
@@ -99,8 +133,6 @@ export function TerminalWindow({ className }: { className?: string }) {
           yellow: "#e3b341",
           red: "#ff7b72",
         },
-        cols: 100,
-        rows: 30,
       })
 
       const fitAddon = new FitAddon()
@@ -110,7 +142,7 @@ export function TerminalWindow({ className }: { className?: string }) {
         try {
           term.loadAddon(new webLinksModule.WebLinksAddon())
         } catch (error) {
-          console.warn("Terminal web links addon failed to initialize:", error)
+          console.warn("Unable to load xterm web links addon", error)
         }
       }
 
@@ -126,30 +158,34 @@ export function TerminalWindow({ className }: { className?: string }) {
       fitAddonRef.current = fitAddon
       setReady(true)
 
-      resizeHandler = () => emitResize()
-      if (typeof window.ResizeObserver !== "undefined" && terminalElement) {
-        fitObserver = new ResizeObserver(() => emitResize())
-        fitObserver.observe(terminalElement)
-      }
-      window.addEventListener("resize", resizeHandler)
+      resizeObserver = new ResizeObserver(() => {
+        resizeTerminal()
+      })
+
+      resizeObserver.observe(terminalElement)
+      window.addEventListener("resize", resizeTerminal)
     }
 
     initializeTerminal()
 
     return () => {
-      isMounted = false
-      if (fitObserver && terminalElement) fitObserver.unobserve(terminalElement)
-      if (resizeHandler) window.removeEventListener("resize", resizeHandler)
+      cancel = true
+      mountedRef.current = false
+      window.removeEventListener("resize", resizeTerminal)
+      if (resizeObserver) {
+        resizeObserver.disconnect()
+      }
       xtermRef.current?.dispose()
       xtermRef.current = null
+      fitAddonRef.current = null
     }
-  }, [send, wsUrl, emitResize])
+  }, [resizeTerminal, send, wsUrl])
 
   useEffect(() => {
     if ((status === "connected" || status === "attached") && ready) {
-      emitResize()
+      resizeTerminal()
     }
-  }, [status, ready, emitResize])
+  }, [ready, resizeTerminal, status])
 
   return (
     <div className={`relative ${className ?? ""}`}>
@@ -166,8 +202,8 @@ export function TerminalWindow({ className }: { className?: string }) {
                 status === "connected" || status === "attached"
                   ? "bg-emerald-400"
                   : status === "connecting" || status === "reconnecting"
-                    ? "bg-amber-400 animate-pulse"
-                    : "bg-red-400"
+                  ? "bg-amber-400 animate-pulse"
+                  : "bg-red-400"
               }`}
             />
             {status}
@@ -184,6 +220,11 @@ export function TerminalWindow({ className }: { className?: string }) {
       {!ready && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#0d1117]/90 text-sm text-zinc-400">
           Initializing terminal...
+        </div>
+      )}
+      {backendError && (
+        <div className="border-t border-white/5 bg-[#3b0d0d]/90 px-4 py-2 text-sm text-rose-300">
+          {backendError}
         </div>
       )}
       {diagnostics && status !== "connecting" && (
