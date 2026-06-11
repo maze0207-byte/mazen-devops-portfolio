@@ -1,3 +1,4 @@
+<img width="1536" height="1024" alt="GitOps architecture" src="https://github.com/user-attachments/assets/e5a7efb3-6e96-4d2d-8814-af833d70f6be" />
 # Mazen's DevOps Portfolio
 
 A modern, interactive DevOps portfolio website built with Next.js, featuring a live terminal sandbox for demonstrating DevOps skills and tools.
