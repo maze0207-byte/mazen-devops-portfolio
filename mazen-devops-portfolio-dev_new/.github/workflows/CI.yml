@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["fix-next-command", "dev_new"]
+    branches: ["master", "dev_new"]
   pull_request:
     branches: [dev_new]
 
