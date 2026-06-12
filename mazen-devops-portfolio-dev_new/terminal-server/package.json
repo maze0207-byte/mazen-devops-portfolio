@@ -8,7 +8,7 @@
     "dev": "ts-node server.ts"
   },
   "dependencies": {
-    "dockerode": "^7.0.0",
+    "dockerode": "^5.0.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {

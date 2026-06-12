@@ -58,8 +58,6 @@ async function ensureSandboxImage() {
   }
 }
 
-const wss = new WebSocketServer({ port: PORT })
-
 // Health check endpoint
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*")
